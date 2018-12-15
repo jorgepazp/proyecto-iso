@@ -5,6 +5,9 @@
  */
 package isw;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
 /**
  *
  * @author pazjo
@@ -17,6 +20,7 @@ public class GUI extends javax.swing.JFrame {
     public GUI() {
         initComponents();
         this.setVisible(true);
+        this.logoPanel.add(new JLabel(new ImageIcon("images/applogo.png")));
         
     }
 
@@ -30,7 +34,8 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        logoPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -40,19 +45,29 @@ public class GUI extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel2.setPreferredSize(new java.awt.Dimension(480, 200));
+        logoPanel.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        logoPanel.setPreferredSize(new java.awt.Dimension(480, 200));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+        jLabel1.setText("fss");
+
+        javax.swing.GroupLayout logoPanelLayout = new javax.swing.GroupLayout(logoPanel);
+        logoPanel.setLayout(logoPanelLayout);
+        logoPanelLayout.setHorizontalGroup(
+            logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoPanelLayout.createSequentialGroup()
+                .addGap(208, 208, 208)
+                .addComponent(jLabel1)
+                .addContainerGap(250, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+        logoPanelLayout.setVerticalGroup(
+            logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logoPanelLayout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(jLabel1)
+                .addContainerGap(103, Short.MAX_VALUE))
         );
+
+        jLabel1.getAccessibleContext().setAccessibleName("logo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -60,11 +75,11 @@ public class GUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 93, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -150,9 +165,10 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JPanel logoPanel;
     // End of variables declaration//GEN-END:variables
 }
