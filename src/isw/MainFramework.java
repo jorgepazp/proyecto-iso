@@ -1,6 +1,7 @@
 //vamos que se puede timmm 
 package isw;
 
+import java.awt.Image;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import javax.swing.JFrame;
@@ -25,12 +26,9 @@ public class MainFramework {
          ConstructorDatos c = new ConstructorDatos();
          
          //Streaming /Arduino
-         StrArd str = new StrArd();
-         
-         //Gui
-         
-          gui.setExtendedState(gui.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-         
+        StrArd str = new StrArd();
+
+       
      }
      
     
