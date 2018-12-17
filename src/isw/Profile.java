@@ -5,6 +5,8 @@
  */
 package isw;
 
+
+
 /**
  *
  * @author pazjo
@@ -14,8 +16,90 @@ public class Profile extends javax.swing.JFrame {
     /**
      * Creates new form ProfileWdw
      */
+    public String rut;      // RUT
+    public String nombre;   //Nombre Completo
+    public String dir;      //Direccion
+    public String nac;      // Nacimiento
+    public String nat;      //Nacionalidad 
+    public String cor;      //email
+    public String num;      // numero
+    
     public Profile() {
         initComponents();
+    }
+
+    public void setTodo(Object [] datos){
+        
+        setRut((String) datos[0]);
+        setNombre((String) datos[1]);
+        setDir((String) datos[2]);
+        setNac((String) datos[3]);
+        setNat((String) datos[4]);
+        setCor((String) datos[5]);
+        setNum((String) datos[6]);
+        
+    }
+    public String getRut() {
+        return rut;
+    }
+
+    public void setRut(String rut) {
+        this.rut = rut;
+        this.jRut.setText(rut);
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+        this.jName.setText(nombre);
+    }
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+        this.jDir.setText(dir);
+    }
+
+    public String getNac() {
+        return nac;
+    }
+
+    public void setNac(String nac) {
+        this.nac = nac;
+        this.jNac.setText(nac);
+    }
+
+    public String getNat() {
+        return nat;
+    }
+
+    public void setNat(String nat) {
+        this.nat = nat;
+        this.jNat.setText(nat);
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+        this.jCor.setText(cor);
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+        this.jNum.setText(num);
     }
 
     /**
@@ -36,6 +120,13 @@ public class Profile extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jRut = new javax.swing.JLabel();
+        jName = new javax.swing.JLabel();
+        jDir = new javax.swing.JLabel();
+        jNac = new javax.swing.JLabel();
+        jNat = new javax.swing.JLabel();
+        jCor = new javax.swing.JLabel();
+        jNum = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -58,6 +149,20 @@ public class Profile extends javax.swing.JFrame {
 
         jLabel8.setText("Correo:");
 
+        jRut.setText("jLabel10");
+
+        jName.setText("jLabel10");
+
+        jDir.setText("jLabel10");
+
+        jNac.setText("jLabel10");
+
+        jNat.setText("jLabel10");
+
+        jCor.setText("jLabel10");
+
+        jNum.setText("jLabel10");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,7 +184,16 @@ public class Profile extends javax.swing.JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel9))))
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jRut)
+                            .addComponent(jName)
+                            .addComponent(jDir)
+                            .addComponent(jNac)
+                            .addComponent(jNat)
+                            .addComponent(jCor)
+                            .addComponent(jNum))))
                 .addContainerGap(126, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -90,19 +204,33 @@ public class Profile extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jRut))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jDir))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jNac))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jNat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jCor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jNum))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -146,6 +274,8 @@ public class Profile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jCor;
+    private javax.swing.JLabel jDir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -155,5 +285,10 @@ public class Profile extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jNac;
+    private javax.swing.JLabel jName;
+    private javax.swing.JLabel jNat;
+    private javax.swing.JLabel jNum;
+    private javax.swing.JLabel jRut;
     // End of variables declaration//GEN-END:variables
 }

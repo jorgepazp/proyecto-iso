@@ -22,8 +22,9 @@ class StreamBDD {
  */
 
   public static void main(String[] args) {
-
-    String jdbcUrl = "jdbc:postgresql://146.83.194.142:5432/phppgadmin";
+      Object [][] hola = new Object[4][3];
+      System.out.println("hola "+hola.length);
+String jdbcUrl = "jdbc:postgresql://146.83.194.142:5432/paz18\"+\"user=jpaz1501&password=1946";
     String username = "jpaz1501";
     String password = "1946";
 
@@ -36,7 +37,7 @@ class StreamBDD {
      // Class.forName("org.postgresql.Driver"); // Class.forName() is not needed since JDBC 4.0
 
       // Step 2 - Open connection
-      conn = DriverManager.getConnection("jdbc:postgresql://146.83.194.142/phppgadmin", username, password);
+      conn = DriverManager.getConnection(jdbcUrl);
 
       // Step 3 - Execute statement
       stmt = conn.createStatement();
