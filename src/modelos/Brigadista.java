@@ -10,5 +10,16 @@ package modelos;
  * @author pazjo
  */
 public class Brigadista {
+    public int idBrigadista;
+    public String rut;
+    public String name;
+    public String telefono;
+    public String nacimiento;
+    public String nacionalidad;
+    public String email;
+    public String correo;
+    public String uuid;
     
+    
+    //public int idBrigadista;
 }

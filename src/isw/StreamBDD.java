@@ -14,43 +14,54 @@ import java.sql.Statement;
  * @author pazjo
  */
 class StreamBDD {
-    
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
 
 
 /**
  * @author imssbora
  */
+    
+/** rs = stmt.executeQuery("CREATE TABLE public.POTO\n" +
+"(\n" +
+"    id integer NOT NULL,\n" +
+"    prueba \"char\",\n" +
+"    CONSTRAINT POTO_pkey PRIMARY KEY (id)\n" +
+")\n" +
+"WITH (\n" +
+"    OIDS = FALSE\n" +
+")\n" +
+"TABLESPACE pg_default;");
+     */
+    public boolean conectarBDD(){
+        System.out.println("Conectando a base de datos.. ");
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/ISO";
+        String username = "postgres";
+        String password = "";
 
-  public static void main(String[] args) {
-      Object [][] hola = new Object[4][3];
-      System.out.println("hola "+hola.length);
-String jdbcUrl = "jdbc:postgresql://146.83.194.142:5432/paz18\"+\"user=jpaz1501&password=1946";
-    String username = "jpaz1501";
-    String password = "1946";
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
 
-    Connection conn = null;
-    Statement stmt = null;
-    ResultSet rs = null;
+        try {
+        // Step 2 - Open connection
+        conn = DriverManager.getConnection(jdbcUrl,username,password);
 
-    try {
-      // Step 1 - Load driver
-     // Class.forName("org.postgresql.Driver"); // Class.forName() is not needed since JDBC 4.0
-
-      // Step 2 - Open connection
-      conn = DriverManager.getConnection(jdbcUrl);
-
-      // Step 3 - Execute statement
-      stmt = conn.createStatement();
-      rs = stmt.executeQuery("SELECT version()");
-
-      // Step 4 - Get result
+        // Step 3 - Execute statement
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery("SELECT version()");
+        
       if (rs.next()) {
-        System.out.println(rs.getString(1));
+        System.out.println(rs.toString());
       }
+      return true;
 
     } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
+        
+        e.printStackTrace();
+        return false;
+    }/* finally {
       try {
 
         // Step 5 Close connection
@@ -66,8 +77,11 @@ String jdbcUrl = "jdbc:postgresql://146.83.194.142:5432/paz18\"+\"user=jpaz1501&
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }*/
     }
-
+    
+  public static void main(String[] args) {
+     
   }
 
     void initComponents() throws SQLException{
@@ -110,7 +124,8 @@ String jdbcUrl = "jdbc:postgresql://146.83.194.142:5432/paz18\"+\"user=jpaz1501&
     
     void StreamBDD() throws SQLException{
         System.out.println("flag 1 ");
-        initComponents();
+        //initComponents();
+        
         System.out.println("flag Driver ");
     }
 }

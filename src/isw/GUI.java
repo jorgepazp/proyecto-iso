@@ -16,12 +16,14 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -37,6 +39,9 @@ public class GUI extends javax.swing.JFrame {
     /**
      * Creates new form GUI
      */
+    /*
+    El siguiente m
+    */
     
     public void setModeloTabla(){
         Tabla t = new Tabla();
@@ -44,6 +49,10 @@ public class GUI extends javax.swing.JFrame {
         tabla.setModel(t);  
         
     }
+    
+    //El siguiente método, hace que la tabla que está actualmente visible ( en interfaz) sea "escondida"
+    //si llamamos a este metodo mostrara en la tabla de la interfaz la matriz de datos que reciba en 
+    
     
  
     
@@ -56,21 +65,25 @@ public class GUI extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        setEstadoLabels(labelEstadoBdd,false);
-        setEstadoLabels(labelEstadoArduino,true);   
+        
+        setEstadoLabels(labelEstadoArduino,true);  
+        
         setModeloTabla();
         this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
         
-        Object [][] d = new Object[3][5];
-        d[0][1]="Jorge Paz";
-        d[0][2]="Activo";
-        d[0][3]="Febrero";
-        d[1][1]="Jamaikins";
-        d[1][2]="Inactivo";
-        d[1][3]="Febreroasfasfs";
-        d[2][1]="Jorge ples";
-        d[2][2]="Activosaf";
-        d[2][3]="Febrero";
+        String [][] d = new String[4][6];
+        d[0][1]="rut";
+        d[0][2]="Jorge Paz";
+        d[0][3]="Activo";
+        d[0][4]="Febrero";
+        d[0][1]="rut";
+        d[0][2]="Jorge Paz";
+        d[0][3]="Activo";
+        d[0][4]="Febrero";
+        d[0][1]="rut";
+        d[0][2]="Jorge Paz";
+        d[0][3]="Activo";
+        d[0][4]="Febrero";
         
         
         renderTabla(d);
@@ -85,20 +98,28 @@ public class GUI extends javax.swing.JFrame {
            // tabla.setFont(new Font("Tahoma", Font.BOLD, 20));
            setTemaUI();
     }   
+    
+    //lo siguiente configura los colores del tema. -ignorar
     public void setTemaUI(){
         tabla.getTableHeader().setReorderingAllowed(false);
           
           
+            jTabbedPane1.setBackground(negro);
+            jTabbedPane1.setForeground(grid);
+            jTabbedPane1.setBorder(BorderFactory.createLineBorder(grid, 1));
+            panelModificar.setBackground(negro);
+            panelCrear.setBackground(negro);
+            panelEliminar.setBackground(negro);
+            panelBuscar.setBackground(negro);
+            
+            
            tabla.setForeground(Color.LIGHT_GRAY);
            jScrollPane1.setBackground(Color.BLACK);
            jScrollPane1.setForeground(Color.red);
            
+           jButton1.setBackground(negro2);
+           jButton1.setForeground(blanco);
            
-           Color grid= new Color(60,60,60);
-           Color negro2= new Color(23,23,23);
-           Color negro1= new Color(43,43,43);
-           Color negro = new Color(27,27,27);
-           Color blanco = new Color(196,196,196);
             tabla.setGridColor(grid);
             tabla.setBackground(negro1);
            arduinolabel.setForeground(blanco);
@@ -116,6 +137,8 @@ public class GUI extends javax.swing.JFrame {
           jScrollPane1.getVerticalScrollBar().setBackground(negro);
           comboBases.setBackground(negro);
           comboBases.setForeground(Color.WHITE);
+          jPanel3.setBackground(negro);
+          labelBuscar.setForeground(blanco);
         tabla.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
 
         @Override
@@ -133,21 +156,52 @@ public class GUI extends javax.swing.JFrame {
             return l;
         }
     });
+        jTabbedPane1.setUI(new BasicTabbedPaneUI() {
+   @Override
+   protected void installDefaults() {
+       super.installDefaults();
+       highlight = negro;
+       lightHighlight = negro1;
+       shadow = negro1;
+       darkShadow = negro2;
+       focus = negro;
+   }
+});
     }
     
 //el siguiente método permite añadir filas a una tabla dado un objeto de datos
     public void addRowToTable(/*Object data*/){
         Tabla t = (Tabla) tabla.getModel();
        
-        Object[] d = {profile,"Jorge Osvaldo Paz Pavez",2,3,v,e}; 
+        Object[] d = {profile,"19462rut","Jorge Osvaldo Paz Pavez",2,3,v,e}; 
         t.addRow(d);
+        tabla.setModel(t);
+    }
+    
+    /*
+    Cuando se quiera agregar una fila a la tabla que se esta mostrando en pantalla
+    usar el siguiente metodo
+    */
+    public void agregarFilaATabla(String[] data){
+        Tabla t = (Tabla) tabla.getModel();
+       
+        t.addRow(data);
+        
         tabla.setModel(t);
     }
     
     /*
     El sigiente método construye la tabla desde 0 dado una matriz con datos
     */
-    public void renderTabla(Object[][] data){
+    public void setConexionBDD(StreamBDD conexion){
+        this.sbdd = conexion;
+    }
+    
+    public StreamBDD getConexionBDD(){
+        return this.sbdd;
+    }
+    
+    public void renderTabla(String[][] data){
        Tabla t = new Tabla();//(Tabla) tabla.getModel();
        
        Object [] array = new Object[6];
@@ -155,14 +209,14 @@ public class GUI extends javax.swing.JFrame {
        for(i=0;i<data.length;i++){
            for(j=0;j<6;j++){
                System.out.println(j);
-               if(j==1||j==2||j==3){
+               if(j==1||j==2||j==3||j==4){
                    System.out.println("Prueba"+array[j]);
                    array[j] = data[i][j];
                }else if (j==0){
                    array[j]=profile;
-               }else if (j==4){
+               }else if (j==5){
                    array[j]=v;
-               }else if (j==5){                  
+               }else if (j==6){                  
                    array[j]=e;
                }
                
@@ -174,21 +228,28 @@ public class GUI extends javax.swing.JFrame {
             column.setMinWidth(105);
             column.setMaxWidth(105);
             column.setPreferredWidth(105);
-            column = tabla.getColumnModel().getColumn(4);
+            column = tabla.getColumnModel().getColumn(5);
             column.setMinWidth(100);
             column.setMaxWidth(100);
             column.setPreferredWidth(100);
-            column = tabla.getColumnModel().getColumn(5);
+            column = tabla.getColumnModel().getColumn(6);
             column.setMinWidth(100);
             column.setMaxWidth(100);
             column.setPreferredWidth(100);
     }
     
+    
+    //El siguiente metodo setea el favicon
     public void setFavicon() throws IOException{
         Image i = ImageIO.read(getClass().getResource("/images/favicon48.png"));
         setIconImage(i);
     }
 
+    /*
+    El siguiente método recibe un label y un estado (verdadero o falso)
+    si es verdadero, setea el color del label recibido a verde
+    si es falso, setea el color a rojo
+    */
     public void setEstadoLabels(JLabel label, boolean state){
         
         if(state){
@@ -214,16 +275,25 @@ public class GUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         logoPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        baselabel = new javax.swing.JLabel();
-        comboBases = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        panelBuscar = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
+        labelBuscar = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        panelCrear = new javax.swing.JPanel();
+        panelModificar = new javax.swing.JPanel();
+        panelEliminar = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         estadoconlabel = new javax.swing.JLabel();
         bddlabel = new javax.swing.JLabel();
         arduinolabel = new javax.swing.JLabel();
-        labelEstadoBdd = new javax.swing.JLabel();
         labelEstadoArduino = new javax.swing.JLabel();
-        baseidlabel = new javax.swing.JLabel();
+        labelEstadoBdd = new javax.swing.JLabel();
         labelIdBase = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        baseidlabel = new javax.swing.JLabel();
+        baselabel = new javax.swing.JLabel();
+        comboBases = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         ImageIcon perfil = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
         tabla = new javax.swing.JTable();
@@ -234,26 +304,137 @@ public class GUI extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        logoPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         logoPanel.setPreferredSize(new java.awt.Dimension(480, 200));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/applogo.png"))); // NOI18N
-        jLabel7.setText("jLabel7");
 
         javax.swing.GroupLayout logoPanelLayout = new javax.swing.GroupLayout(logoPanel);
         logoPanel.setLayout(logoPanelLayout);
         logoPanelLayout.setHorizontalGroup(
             logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel7)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(186, 186, 186))
         );
         logoPanelLayout.setVerticalGroup(
             logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoPanelLayout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addComponent(jLabel7)
+            .addGroup(logoPanelLayout.createSequentialGroup()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Editar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(196, 196, 196))); // NOI18N
+
+        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+
+        labelBuscar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        labelBuscar.setText("Buscar por RUT:");
+
+        jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelBuscarLayout = new javax.swing.GroupLayout(panelBuscar);
+        panelBuscar.setLayout(panelBuscarLayout);
+        panelBuscarLayout.setHorizontalGroup(
+            panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBuscarLayout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(labelBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(535, Short.MAX_VALUE))
+        );
+        panelBuscarLayout.setVerticalGroup(
+            panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBuscarLayout.createSequentialGroup()
+                .addContainerGap(145, Short.MAX_VALUE)
+                .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(labelBuscar))
                 .addContainerGap())
         );
+
+        jTabbedPane1.addTab("Buscar", panelBuscar);
+
+        javax.swing.GroupLayout panelCrearLayout = new javax.swing.GroupLayout(panelCrear);
+        panelCrear.setLayout(panelCrearLayout);
+        panelCrearLayout.setHorizontalGroup(
+            panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        panelCrearLayout.setVerticalGroup(
+            panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 183, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Crear", panelCrear);
+
+        javax.swing.GroupLayout panelModificarLayout = new javax.swing.GroupLayout(panelModificar);
+        panelModificar.setLayout(panelModificarLayout);
+        panelModificarLayout.setHorizontalGroup(
+            panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        panelModificarLayout.setVerticalGroup(
+            panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 183, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Editar", panelModificar);
+
+        javax.swing.GroupLayout panelEliminarLayout = new javax.swing.GroupLayout(panelEliminar);
+        panelEliminar.setLayout(panelEliminarLayout);
+        panelEliminarLayout.setHorizontalGroup(
+            panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        panelEliminarLayout.setVerticalGroup(
+            panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 183, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Borrar", panelEliminar);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        estadoconlabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        estadoconlabel.setText("ESTADOS DE CONEXIONES");
+
+        bddlabel.setText("Base de datos:");
+
+        arduinolabel.setText("Arduino:");
+
+        labelEstadoArduino.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        labelEstadoArduino.setText("jLabel6");
+
+        labelEstadoBdd.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        labelEstadoBdd.setForeground(new java.awt.Color(153, 0, 0));
+        labelEstadoBdd.setText("jLabel5");
+
+        labelIdBase.setText("Concepción");
+
+        baseidlabel.setText("ID. Base:");
 
         baselabel.setText("BASE:");
 
@@ -264,96 +445,59 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        estadoconlabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        estadoconlabel.setText("ESTADOS DE CONEXIONES");
-
-        bddlabel.setText("Base de datos:");
-
-        arduinolabel.setText("Arduino:");
-
-        labelEstadoBdd.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        labelEstadoBdd.setForeground(new java.awt.Color(153, 0, 0));
-        labelEstadoBdd.setText("jLabel5");
-
-        labelEstadoArduino.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        labelEstadoArduino.setText("jLabel6");
-
-        baseidlabel.setText("ID. Base:");
-
-        labelIdBase.setText("Concepción");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 950, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(baselabel)
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(7, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(arduinolabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelEstadoArduino))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(bddlabel)
+                            .addGap(67, 67, 67)
+                            .addComponent(labelEstadoBdd)))
+                    .addComponent(estadoconlabel))
+                .addGap(65, 65, 65))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(baselabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(baseidlabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(baseidlabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(labelIdBase))
-                            .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(arduinolabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(labelEstadoArduino))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(bddlabel)
-                                    .addGap(67, 67, 67)
-                                    .addComponent(labelEstadoBdd)))
-                            .addComponent(estadoconlabel))))
-                .addGap(110, 110, 110)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
-                .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(labelIdBase))
+                    .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(baselabel)
                     .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(baseidlabel)
                     .addComponent(labelIdBase))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(estadoconlabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bddlabel)
                     .addComponent(labelEstadoBdd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(arduinolabel)
                     .addComponent(labelEstadoArduino))
-                .addGap(38, 38, 38))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(60, 60, 60)));
@@ -381,22 +525,45 @@ public class GUI extends javax.swing.JFrame {
     });
     jScrollPane1.setViewportView(tabla);
 
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(jScrollPane1)
+                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
+    jPanel1Layout.setVerticalGroup(
+        jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(jPanel1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
+    );
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jScrollPane1)
-            .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 45, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE))
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
 
     pack();
@@ -423,14 +590,16 @@ public class GUI extends javax.swing.JFrame {
             p.setResizable(false);
             Object[] dato = {
             "19462117-5",
-            "JORGE PAZ",
+            "JORGE OSVALDO PAZ PAVEZ",
             "COIHUE 374",
             "27/06/1997",
             "CHILENA",
             "paz.jorge1@gmail.com",
             "+569 xxxxxxx"
         };
+           // p.jPael1.setBackground(negro);
             p.setTodo(dato);
+            
          }else if (column ==4){
          //Si la columna es 4, es por que se selecciono ver los registros de algun usuario
              vG= new VerGUI();
@@ -438,9 +607,11 @@ public class GUI extends javax.swing.JFrame {
              vG.setVisible(true);   
          }else if (column == 5){
          //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
+         
             eG= new EditGUI();
             eG.setResizable(false);
             eG.setVisible(true);
+            
          }
          }
         tabla.addMouseListener(new MouseAdapter() {
@@ -448,9 +619,16 @@ public class GUI extends javax.swing.JFrame {
 });
     }//GEN-LAST:event_tablaMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        //Si la siguiente condicion se repite es por que no se ha ingresado nada para buscar
+        //
+        if(!jTextField1.equals(null)){
+        String filtro = jTextField1.getText();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -484,9 +662,19 @@ public class GUI extends javax.swing.JFrame {
     
         
     }
+    
+    public StreamBDD sbdd; //variable que contiene la conexión con la base de datos,
+    // realizar consultas con este parametro
     public ImageIcon profile = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
     public    ImageIcon v = new ImageIcon(getClass().getResource("/images/botonver.png"));
     public     ImageIcon e = new ImageIcon(getClass().getResource("/images/botoneditar.png"));
+    
+    //Colores UI
+    Color grid= new Color(60,60,60);
+    Color negro2= new Color(23,23,23);
+    Color negro1= new Color(43,43,43);
+    Color negro = new Color(27,27,27);
+    Color blanco = new Color(196,196,196);
     
     public EditGUI eG;
     public VerGUI vG;
@@ -498,14 +686,23 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel bddlabel;
     private javax.swing.JComboBox<String> comboBases;
     private javax.swing.JLabel estadoconlabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel labelEstadoArduino;
-    private javax.swing.JLabel labelEstadoBdd;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel labelBuscar;
+    public javax.swing.JLabel labelEstadoArduino;
+    public javax.swing.JLabel labelEstadoBdd;
     private javax.swing.JLabel labelIdBase;
     private javax.swing.JPanel logoPanel;
+    private javax.swing.JPanel panelBuscar;
+    private javax.swing.JPanel panelCrear;
+    private javax.swing.JPanel panelEliminar;
+    private javax.swing.JPanel panelModificar;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

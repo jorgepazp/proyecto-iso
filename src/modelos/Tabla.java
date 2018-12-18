@@ -12,9 +12,22 @@ import javax.swing.table.TableModel;
  */
 public class Tabla extends DefaultTableModel {
     
+    /*
+    OBJETIVO: Mostrar en tabla Datos conseguidos de la base de datos.
+    Esto es: mostrar los datos correspondientes en la tabla segun la base que esté seleccionada
+    generar los logs de asistencia 
+    modificar asistencias casos excepcionales -> lo que la profe te asigno
+    para mostrar lo ultimo utiliza la clase verGUI ( cuando el usuario clickee en modificar registros
+    debe aparecer una ventana que permita modificar solo la fecha de salida del marcaje del usuario, y la fecha de inicio no puede ser
+    despues qu ela fecha modificada (validación, no urgente) permitiendo tambien agregar una nota de modificacion
+    el cambio en el log se debe hacer en la base de datos una vez realizado todo 
+    
+    */
+    
+    
     public Tabla(){
-        Object[] nombresColumnas = {"Perfil","Nombre","Estado","Último registro","Ver Registro","Editar Registro"};
-        this.setColumnCount(5);
+        Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro"};
+        this.setColumnCount(6);
         this.setColumnIdentifiers(nombresColumnas);
         
   
@@ -30,8 +43,8 @@ public class Tabla extends DefaultTableModel {
     public Class<?> getColumnClass(int column) {
         switch (column) {
             case 0: return ImageIcon.class;
+            case 6: return ImageIcon.class;
             case 5: return ImageIcon.class;
-            case 4: return ImageIcon.class;
             default: return Integer.class;
         }
     }
