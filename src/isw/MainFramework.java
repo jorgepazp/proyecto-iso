@@ -58,13 +58,14 @@ public class MainFramework {
          ConstructorDatos c = new ConstructorDatos();
          
          //Streaming /Arduino
-        StrArd str = new StrArd();
+        StrArd str = new StrArd(sbdd);
+        gui.setEstadoLabels(gui.labelEstadoArduino,str.conexionArduino());
         splash.setVisible(false);
         gui.setVisible(true);
-        Thread.sleep(5000);
+        /*Thread.sleep(5000);
         gui.setModeloTabla();
         gui.addRowToTable();
-       
+       */
      }
      
     

@@ -204,10 +204,10 @@ public class GUI extends javax.swing.JFrame {
     public void renderTabla(String[][] data){
        Tabla t = new Tabla();//(Tabla) tabla.getModel();
        
-       Object [] array = new Object[6];
+       Object [] array = new Object[7];
        int i,j;
        for(i=0;i<data.length;i++){
-           for(j=0;j<6;j++){
+           for(j=0;j<=6;j++){
                System.out.println(j);
                if(j==1||j==2||j==3||j==4){
                    System.out.println("Prueba"+array[j]);
@@ -583,6 +583,8 @@ public class GUI extends javax.swing.JFrame {
          int row = target.getSelectedRow();
          int column = target.getSelectedColumn();
          //Si la columna es 0, es por que se seleccionó el perfil de algun usuario
+         
+         System.out.println("fila = "+row +" columna : "+ column);
          if(column == 0){
              //linkear row al perfil
             p = new Profile();
@@ -600,12 +602,12 @@ public class GUI extends javax.swing.JFrame {
            // p.jPael1.setBackground(negro);
             p.setTodo(dato);
             
-         }else if (column ==4){
+         }else if (column ==5){
          //Si la columna es 4, es por que se selecciono ver los registros de algun usuario
              vG= new VerGUI();
              vG.setResizable(false);
              vG.setVisible(true);   
-         }else if (column == 5){
+         }else if (column == 6){
          //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
          
             eG= new EditGUI();

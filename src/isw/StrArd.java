@@ -8,6 +8,7 @@ package isw;
 
 import com.panamahitek.ArduinoException;
 import com.panamahitek.PanamaHitek_Arduino;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jssc.SerialPortEvent;
@@ -21,7 +22,13 @@ import jssc.SerialPortException;
  */
 public class StrArd {
 //Se crea una variable tipo PanamaHitek_Arduino
-
+    public static StreamBDD conexion;
+    
+   // Al inicializarse el arduino, se debe conectar con la base de datos para efectuar la asistencia
+    public StrArd(StreamBDD sbdd){
+        this.conexion = sbdd;
+    }
+    
     static PanamaHitek_Arduino ino = new PanamaHitek_Arduino();
     //Se crea un eventListener para el puerto serie
     static SerialPortEventListener listener = new SerialPortEventListener() {
@@ -40,20 +47,42 @@ public class StrArd {
                     //Se le asigna el mensaje recibido a la variable msg
                     String msg = ino.printMessage();
                     //Se imprime la variable msg
-                    System.out.println("Mensaje recibido --> " + msg);
+                    System.out.println(msg);
+                    conexion.registrarAsistencia(msg);
                 }
             } catch (SerialPortException ex) {
                 Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ArduinoException ex) {
                 Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    };
-
+    };  
+    
+    //el siguiente método retorna true si se conecto el arduino correctamente, de lo contrario false
+    public boolean conexionArduino(){
+       try {
+            //Se inicializa la conexion con el Arduino en el puerto COM5
+            System.out.println("Puertos disponibles"+ino.getPortsAvailable());
+            System.out.println(ino.getSerialPorts());
+            ino.arduinoRX("COM3", 9600, listener);
+            return true;
+        } catch (ArduinoException ex) {
+            Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (SerialPortException ex) {
+            Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } 
+    }
     public static void main(String[] args) {
         try {
             //Se inicializa la conexion con el Arduino en el puerto COM5
-            ino.arduinoRX("COM5", 9600, listener);
+             System.out.println("Puertos disponibles"+ino.getPortsAvailable());
+             System.out.println(ino.getSerialPorts());
+            ino.arduinoRX("COM3", 9600, listener);
+           
         } catch (ArduinoException ex) {
             Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SerialPortException ex) {
