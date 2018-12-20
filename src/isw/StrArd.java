@@ -67,6 +67,7 @@ public class StrArd {
             System.out.println("Puertos disponibles"+ino.getPortsAvailable());
             System.out.println(ino.getSerialPorts());
             ino.arduinoRX("COM3", 9600, listener);
+            
             return true;
         } catch (ArduinoException ex) {
             Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);

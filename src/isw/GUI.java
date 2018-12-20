@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -56,8 +57,8 @@ public class GUI extends javax.swing.JFrame {
     
  
     
-    public GUI() {
-        
+    public GUI(StreamBDD bdd) {
+        this.sbdd = bdd;
         initComponents();
         
         try {
@@ -71,30 +72,9 @@ public class GUI extends javax.swing.JFrame {
         setModeloTabla();
         this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
         
-        String [][] d = new String[4][6];
-        d[0][1]="rut";
-        d[0][2]="Jorge Paz";
-        d[0][3]="Activo";
-        d[0][4]="Febrero";
-        d[0][1]="rut";
-        d[0][2]="Jorge Paz";
-        d[0][3]="Activo";
-        d[0][4]="Febrero";
-        d[0][1]="rut";
-        d[0][2]="Jorge Paz";
-        d[0][3]="Activo";
-        d[0][4]="Febrero";
         
         
-        renderTabla(d);
-        addRowToTable();
-       /* addRowToTable();
-        addRowToTable();
-        addRowToTable();
-        addRowToTable();
-        addRowToTable();
-        addRowToTable();
-        addRowToTable();*/
+       
            // tabla.setFont(new Font("Tahoma", Font.BOLD, 20));
            setTemaUI();
     }   
@@ -103,7 +83,14 @@ public class GUI extends javax.swing.JFrame {
     public void setTemaUI(){
         tabla.getTableHeader().setReorderingAllowed(false);
           
+            jButton3.setBackground(negro1);
+            jButton3.setForeground(blanco);
           
+            jButton2.setBackground(negro1);
+            jButton2.setForeground(blanco);
+            jButton2.setEnabled(false);
+
+            
             jTabbedPane1.setBackground(negro);
             jTabbedPane1.setForeground(grid);
             jTabbedPane1.setBorder(BorderFactory.createLineBorder(grid, 1));
@@ -206,11 +193,14 @@ public class GUI extends javax.swing.JFrame {
        
        Object [] array = new Object[7];
        int i,j;
+       
+       
+       
        for(i=0;i<data.length;i++){
            for(j=0;j<=6;j++){
-               System.out.println(j);
+               
                if(j==1||j==2||j==3||j==4){
-                   System.out.println("Prueba"+array[j]);
+                   
                    array[j] = data[i][j];
                }else if (j==0){
                    array[j]=profile;
@@ -281,6 +271,7 @@ public class GUI extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         labelBuscar = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         panelCrear = new javax.swing.JPanel();
         panelModificar = new javax.swing.JPanel();
         panelEliminar = new javax.swing.JPanel();
@@ -294,6 +285,7 @@ public class GUI extends javax.swing.JFrame {
         baseidlabel = new javax.swing.JLabel();
         baselabel = new javax.swing.JLabel();
         comboBases = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ImageIcon perfil = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
         tabla = new javax.swing.JTable();
@@ -321,11 +313,12 @@ public class GUI extends javax.swing.JFrame {
         logoPanelLayout.setVerticalGroup(
             logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logoPanelLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Editar", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(196, 196, 196))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Herramientas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(196, 196, 196))); // NOI18N
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -334,9 +327,17 @@ public class GUI extends javax.swing.JFrame {
         labelBuscar.setText("Buscar por RUT:");
 
         jButton1.setText("Buscar");
+        jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Actualizar Tabla");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -351,16 +352,19 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
-                .addContainerGap(535, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(446, Short.MAX_VALUE))
         );
         panelBuscarLayout.setVerticalGroup(
             panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBuscarLayout.createSequentialGroup()
-                .addContainerGap(145, Short.MAX_VALUE)
+                .addContainerGap(151, Short.MAX_VALUE)
                 .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
-                    .addComponent(labelBuscar))
+                    .addComponent(labelBuscar)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -370,11 +374,11 @@ public class GUI extends javax.swing.JFrame {
         panelCrear.setLayout(panelCrearLayout);
         panelCrearLayout.setHorizontalGroup(
             panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+            .addGap(0, 968, Short.MAX_VALUE)
         );
         panelCrearLayout.setVerticalGroup(
             panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 183, Short.MAX_VALUE)
+            .addGap(0, 189, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Crear", panelCrear);
@@ -383,11 +387,11 @@ public class GUI extends javax.swing.JFrame {
         panelModificar.setLayout(panelModificarLayout);
         panelModificarLayout.setHorizontalGroup(
             panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+            .addGap(0, 968, Short.MAX_VALUE)
         );
         panelModificarLayout.setVerticalGroup(
             panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 183, Short.MAX_VALUE)
+            .addGap(0, 189, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Editar", panelModificar);
@@ -396,11 +400,11 @@ public class GUI extends javax.swing.JFrame {
         panelEliminar.setLayout(panelEliminarLayout);
         panelEliminarLayout.setHorizontalGroup(
             panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+            .addGap(0, 968, Short.MAX_VALUE)
         );
         panelEliminarLayout.setVerticalGroup(
             panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 183, Short.MAX_VALUE)
+            .addGap(0, 189, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Borrar", panelEliminar);
@@ -432,7 +436,7 @@ public class GUI extends javax.swing.JFrame {
         labelEstadoBdd.setForeground(new java.awt.Color(153, 0, 0));
         labelEstadoBdd.setText("jLabel5");
 
-        labelIdBase.setText("Concepción");
+        labelIdBase.setText("1");
 
         baseidlabel.setText("ID. Base:");
 
@@ -445,6 +449,14 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Reconectar");
+        jButton2.setToolTipText("Función no implementada en esta versión");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -452,16 +464,18 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(7, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(arduinolabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(labelEstadoArduino))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(bddlabel)
-                            .addGap(67, 67, 67)
-                            .addComponent(labelEstadoBdd)))
-                    .addComponent(estadoconlabel))
+                    .addComponent(estadoconlabel)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton2)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(arduinolabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(labelEstadoArduino))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(bddlabel)
+                                .addGap(67, 67, 67)
+                                .addComponent(labelEstadoBdd)))))
                 .addGap(65, 65, 65))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
@@ -497,7 +511,9 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(arduinolabel)
                     .addComponent(labelEstadoArduino))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(60, 60, 60)));
@@ -531,35 +547,33 @@ public class GUI extends javax.swing.JFrame {
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(jScrollPane1)
-                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap(29, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(0, 45, Short.MAX_VALUE))
+        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,67 +583,102 @@ public class GUI extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboBasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBasesActionPerformed
-        // TODO add your handling code here:
-        labelIdBase.setText(comboBases.getSelectedItem().toString());
-    }//GEN-LAST:event_comboBasesActionPerformed
-
     //listener abre perfiles
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         // TODO add your handling code here:
-         System.out.println("deja de clickear wetajiji ="+evt.getClickCount());
-         if(evt.getClickCount() ==2){
-             JTable target = (JTable)evt.getSource();
-         int row = target.getSelectedRow();
-         int column = target.getSelectedColumn();
-         //Si la columna es 0, es por que se seleccionó el perfil de algun usuario
-         
-         System.out.println("fila = "+row +" columna : "+ column);
-         if(column == 0){
-             //linkear row al perfil
-            p = new Profile();
-            p.setVisible(true);
-            p.setResizable(false);
-            Object[] dato = {
-            "19462117-5",
-            "JORGE OSVALDO PAZ PAVEZ",
-            "COIHUE 374",
-            "27/06/1997",
-            "CHILENA",
-            "paz.jorge1@gmail.com",
-            "+569 xxxxxxx"
-        };
-           // p.jPael1.setBackground(negro);
-            p.setTodo(dato);
-            
-         }else if (column ==5){
-         //Si la columna es 4, es por que se selecciono ver los registros de algun usuario
-             vG= new VerGUI();
-             vG.setResizable(false);
-             vG.setVisible(true);   
-         }else if (column == 6){
-         //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
-         
-            eG= new EditGUI();
-            eG.setResizable(false);
-            eG.setVisible(true);
-            
-         }
-         }
+        System.out.println("deja de clickear jiji ="+evt.getClickCount());
+        if(evt.getClickCount() ==2){
+            JTable target = (JTable)evt.getSource();
+            int row = target.getSelectedRow();
+            int column = target.getSelectedColumn();
+            //Si la columna es 0, es por que se seleccionó el perfil de algun usuario
+
+            System.out.println("fila = "+row +" columna : "+ column);
+            if(column == 0){
+                //linkear row al perfil
+                System.out.println(tabla.getValueAt(row, 1));
+                try {
+                    p = new Profile();
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                p.setVisible(true);
+                p.setResizable(false);
+                
+                try {
+                    // p.jPael1.setBackground(negro);
+                    p.setTodo(sbdd.getDatosByRut((String) tabla.getValueAt(row, 1)));
+                } catch (SQLException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }else if (column ==5){
+                //Si la columna es 4, es por que se selecciono ver los registros de algun usuario
+                vG= new VerGUI();
+                vG.setResizable(false);
+                vG.setVisible(true);
+                vG.setLocationRelativeTo(null);
+                vG.setBackground(negro2);
+            }else if (column == 6){
+                //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
+
+                eG= new EditGUI();
+                eG.setResizable(false);
+                eG.setVisible(true);
+                eG.setLocationRelativeTo(null);
+
+            }
+        }
         tabla.addMouseListener(new MouseAdapter() {
-        
-});
+
+        });
     }//GEN-LAST:event_tablaMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void comboBasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBasesActionPerformed
+        // TODO add your handling code here:
+       // labelIdBase.setText(comboBases.getSelectedItem().toString());
+        String nombrebase = comboBases.getSelectedItem().toString();
+        System.out.println(nombrebase+" -< nombre base");
+        int id;
+        try {
+            id = this.sbdd.getIdBase(nombrebase);
+            labelIdBase.setText(String.valueOf(id));
+            renderTabla(sbdd.generaTablas(id));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_comboBasesActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+
         //Si la siguiente condicion se repite es por que no se ha ingresado nada para buscar
         //
         if(!jTextField1.equals(null)){
-        String filtro = jTextField1.getText();
+            String filtro = jTextField1.getText();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String nombrebase = comboBases.getSelectedItem().toString();
+        System.out.println(nombrebase+" -< nombre base");
+        int id;
+        try {
+            id = this.sbdd.getIdBase(nombrebase);
+            //labelIdBase.setText(String.valueOf(id));
+            renderTabla(sbdd.generaTablas(id));
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
@@ -658,14 +707,14 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI().setVisible(true);
+                new GUI(sbdd).setVisible(true);
             }
         });
     
         
     }
     
-    public StreamBDD sbdd; //variable que contiene la conexión con la base de datos,
+    public static StreamBDD sbdd; //variable que contiene la conexión con la base de datos,
     // realizar consultas con este parametro
     public ImageIcon profile = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
     public    ImageIcon v = new ImageIcon(getClass().getResource("/images/botonver.png"));
@@ -689,6 +738,8 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboBases;
     private javax.swing.JLabel estadoconlabel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

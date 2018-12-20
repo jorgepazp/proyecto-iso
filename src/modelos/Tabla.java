@@ -29,12 +29,9 @@ public class Tabla extends DefaultTableModel {
         Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro"};
         this.setColumnCount(6);
         this.setColumnIdentifiers(nombresColumnas);
-        
-  
     }
     
-
-
+   
     //Con lo siguiente, deshabilitamos que se puedan editar las celdas
     @Override
     public boolean isCellEditable(int row, int column){return false;}

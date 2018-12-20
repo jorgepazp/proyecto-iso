@@ -6,6 +6,11 @@
 package isw;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 
 
@@ -25,28 +30,31 @@ public class Profile extends javax.swing.JFrame {
     public String nat;      //Nacionalidad 
     public String cor;      //email
     public String num;      // numero
+    public String uuid;
     Color grid= new Color(60,60,60);
            Color negro2= new Color(23,23,23);
            Color negro1= new Color(43,43,43);
            Color negro = new Color(27,27,27);
            Color blanco = new Color(196,196,196);
-    public Profile() {
+    public Profile() throws IOException {
         initComponents();
         setUI();
+        setFavicon();
         
     }
 
-    public void setTodo(Object [] datos){
+    public void setTodo(String [] datos){
 
     
    
-        setRut((String) datos[0]);
-        setNombre((String) datos[1]);
-        setDir((String) datos[2]);
-        setNac((String) datos[3]);
-        setNat((String) datos[4]);
-        setCor((String) datos[5]);
-        setNum((String) datos[6]);
+        setRut(datos[0]);
+        setNombre(datos[1]);
+        setDir( datos[2]);
+        setNac(datos[3]);
+        setNat(datos[4]);
+        setCor(datos[5]);
+        setNum( datos[6]);
+        setUUID( datos[7]);
         
     }
     
@@ -68,6 +76,8 @@ public class Profile extends javax.swing.JFrame {
         jLabel7.setForeground(blanco);
         jLabel8.setForeground(blanco);
         jLabel9.setForeground(blanco);
+        jLabel10.setForeground(blanco);
+        jLabel1.setForeground(blanco);
         
         jPanel1.setBackground(negro);
         
@@ -76,10 +86,25 @@ public class Profile extends javax.swing.JFrame {
     public String getRut() {
         return rut;
     }
+    public String getUUID() {
+        return uuid;
+    }
 
     public void setRut(String rut) {
         this.rut = rut;
         this.jRut.setText(rut);
+    }
+ public void setFavicon() throws IOException{
+        Image i = ImageIO.read(getClass().getResource("/images/favicon48.png"));
+        setIconImage(i);
+    }
+    public void setUUID(String uuid) {
+        this.uuid = uuid;
+        this.jLabel11.setText(uuid);
+        if(uuid.equals("000 , 000 , 000 , 000")){
+            this.jLabel11.setForeground(new java.awt.Color(240, 70, 70));
+        }else
+            this.jLabel11.setForeground(blanco);
     }
 
     public String getNombre() {
@@ -162,8 +187,11 @@ public class Profile extends javax.swing.JFrame {
         jNat = new javax.swing.JLabel();
         jCor = new javax.swing.JLabel();
         jNum = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Perfil de Usuario");
 
         jLabel9.setText("Teléfono:");
 
@@ -196,6 +224,10 @@ public class Profile extends javax.swing.JFrame {
 
         jNum.setText("jLabel10");
 
+        jLabel10.setText("UUID:");
+
+        jLabel11.setText("(000 , 000, 000, 000)");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -207,6 +239,14 @@ public class Profile extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jName)
+                            .addComponent(jLabel4)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -214,23 +254,17 @@ public class Profile extends javax.swing.JFrame {
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel10))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
                             .addComponent(jDir)
                             .addComponent(jNac)
                             .addComponent(jNat)
                             .addComponent(jCor)
                             .addComponent(jNum)
-                            .addComponent(jRut)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jName)
-                            .addComponent(jLabel4)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(jLabel1)))
+                            .addComponent(jRut))))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -268,7 +302,11 @@ public class Profile extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jNum))
-                .addGap(34, 34, 34))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addGap(12, 12, 12))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -316,7 +354,11 @@ public class Profile extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Profile().setVisible(true);
+                try {
+                    new Profile().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -325,6 +367,8 @@ public class Profile extends javax.swing.JFrame {
     private javax.swing.JLabel jCor;
     private javax.swing.JLabel jDir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

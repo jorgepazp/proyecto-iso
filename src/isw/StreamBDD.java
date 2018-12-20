@@ -22,7 +22,83 @@ class StreamBDD {
     Statement stmt = null;
     ResultSet rs = null;
 
-
+    //Retrieves the base id dado el nombre de la misma
+    public int getIdBase(String nombreBase) throws SQLException{
+         System.out.println("prueba err");
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        Statement stamt = conn.createStatement();
+        System.out.println("prueba err");
+        //Consulta
+        String query = "select base_codigo From base " +
+        " where base_nombre = '"+nombreBase+"'";
+           
+        rs=stamt.executeQuery(query);
+        System.out.println("prueba err2");
+        while(rs.next()){
+        System.out.println("prueba err3");
+            return rs.getInt("base_codigo");
+        }
+        return 1; 
+    }
+    /**
+     *
+     * El siguiente método recibe la id de una base, y transforma la información 
+     * a un formato aceptado por la tabla que se muestra en la GUI
+     * 
+     **/
+    public String[][] generaTablas(int idBase) throws SQLException{
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        Statement stamt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        
+        //Consulta
+        String query = "select brigadista_rut,brigadista_nombre_completo,\"isActivo\" From brigadista b, base e\n" +
+        " where b.base_codigo = "+idBase+" GROUP BY brigadista_rut";
+           
+        rs=stamt.executeQuery(query);
+         rs.last();
+        System.out.println("numero de filas: "+rs.getRow());
+        
+        int filas = rs.getRow();
+        String aux = null; 
+        String [][]data = new String[filas][7];
+       
+        //COLUMNAS
+        /*
+        1: RUT brigadista
+        2: Nombre Completo
+        3:ESTADO
+        4: ultimo registro
+        */
+        
+        rs.beforeFirst();
+        
+        while (rs.next()) {
+            
+            System.out.println("Fila actual: "+rs.getRow());
+            System.out.println(rs.getString("brigadista_rut"));
+            data[rs.getRow()-1][1] = rs.getString("brigadista_rut");
+            data[rs.getRow()-1][2] = rs.getString("brigadista_nombre_completo");
+            if(rs.getBoolean("isActivo")){
+                aux = "Activo";
+            }else aux = "Inactivo";
+            data[rs.getRow()-1][3] = aux;
+            data[rs.getRow()-1][4] = getUltimaAsistenciaString(rs.getString("brigadista_rut"));
+            System.out.println(rs.getString("brigadista_nombre_completo"));
+            System.out.println(rs.getBoolean("isActivo"));
+           
+        }
+        
+        System.out.println("El numero de filas que contiene esta tabla es: "+data.length);
+        return data;
+        /*
+        for(int i = 0;i<=data.length;i++){
+            for(int j =0;j<=6;j++){
+                System.out.println(data[i][j]+"+");
+            }
+            System.out.println();
+        }*/
+    }
+    
     public String getRutAsociadoAUUID(String UUID) throws SQLException{
         conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
         stmt = conn.createStatement();
@@ -34,16 +110,7 @@ class StreamBDD {
         rs=stmt.executeQuery(query);
     while (rs.next()) {
         System.out.println("FLAG:"+rs.getString(1));
-        return rs.getString(1);
-        /*
-    for (int i = 1; i <= columnsNumber; i++) {
-        if (i > 1) System.out.print(",  ");
-        
-        String columnValue = rs.getString(i);
-        System.out.print(columnValue + " " + rsmd.getColumnName(i));
-    }
-    System.out.println("");*/
-}
+        return rs.getString(1);}
     
         return null;
     }
@@ -51,8 +118,6 @@ class StreamBDD {
     /*
     El siguiente método nos dice si cierto brigadista esta activo actualmente en la base
     */
-    
-    
     public boolean isActivo(String RUT) throws SQLException{
         conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
         stmt = conn.createStatement();
@@ -79,6 +144,10 @@ class StreamBDD {
         
         return text; 
     }
+    
+    /*
+    *IMPLEMENTACIÓN JORGE PAZ ENTREGA 2
+    */
     
     public void registrarAsistencia(String UUID) throws SQLException{
         System.out.println("La UUID Recibida es: "+UUID);
@@ -137,6 +206,27 @@ class StreamBDD {
         rs=stmt.executeQuery(query);
         rs.next();
         return rs.getInt(1);    
+    }
+    
+    //El siguiente metodo devuelve en String la ultima vez que un brigadista marcó 
+    //ya sea el inicio de su turno, o el fin del mismo
+    public String getUltimaAsistenciaString(String RUT) throws SQLException{
+        Connection con=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        Statement stat = con.createStatement();
+        
+        ResultSet resultSet ;
+        String query = "SELECT asistencia_marca_inicio,asistencia_marca_fin \n" +
+        "FROM asistencia\n" +
+        "WHERE brigadista_rut = '"+RUT+"'\n" +
+        "ORDER BY asistencia_codigo DESC \n" +
+        "LIMIT 1";     
+        resultSet=stat.executeQuery(query);
+        
+        if(resultSet.next()){
+        System.out.println("Resultado RS GUAS method: "+ resultSet.getString("asistencia_marca_inicio")+" "+ resultSet.getString("asistencia_marca_fin"));
+        if(resultSet.getString("asistencia_marca_fin")==null) return resultSet.getString("asistencia_marca_inicio");
+        else return resultSet.getString("asistencia_marca_fin");
+        } else return "Sin Registro de Asistencia";
     }
     
     //El siguiente metodo cambia el estado activo de un brigadista según sea el parametro que recibe
@@ -202,6 +292,33 @@ class StreamBDD {
     
   public static void main(String[] args) {
      
+  }
+  public String[] getDatosByRut(String RUT) throws SQLException{
+       conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+       stmt = conn.createStatement();
+        
+        //COnsulta
+        String query = "SELECT * FROM BRIGADISTA "
+                + "WHERE brigadista_rut = '"+ RUT+"'";
+           
+        rs=stmt.executeQuery(query);
+       
+        //Esto va a entrar 1 sola vez
+        while(rs.next()){
+            String [] datos ={
+            rs.getString("brigadista_rut"),
+            rs.getString("brigadista_nombre_completo"),
+            rs.getString("brigadista_direccion"),
+            rs.getString("brigadista_rol"),
+            rs.getString("brigadista_nacionalidad"),
+            rs.getString("brigadista_correo"),
+            rs.getString("brigadista_telefono"),
+            rs.getString("brigadista_uuid")
+                
+            };
+            return datos;        
+        }
+        return null;
   }
 
     void initComponents() throws SQLException{
