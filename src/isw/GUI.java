@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -28,6 +29,7 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import modelos.Base;
 import modelos.Tabla;
 
 
@@ -37,12 +39,12 @@ import modelos.Tabla;
  */
 public class GUI extends javax.swing.JFrame {
 
+ 
+    private ArrayList<Base> data = new ArrayList<Base>();
     /**
      * Creates new form GUI
      */
-    /*
-    El siguiente m
-    */
+   
     
     public void setModeloTabla(){
         Tabla t = new Tabla();
@@ -78,6 +80,11 @@ public class GUI extends javax.swing.JFrame {
            // tabla.setFont(new Font("Tahoma", Font.BOLD, 20));
            setTemaUI();
     }   
+    
+    //El siguiente metodo le da los datos al gui para usarlos en verGui y EditarGui entre otros
+    public void setFuenteDeDatos(ArrayList<Base> datos){
+        this.data = datos;
+    }
     
     //lo siguiente configura los colores del tema. -ignorar
     public void setTemaUI(){
@@ -596,7 +603,7 @@ public class GUI extends javax.swing.JFrame {
             System.out.println("fila = "+row +" columna : "+ column);
             if(column == 0){
                 //linkear row al perfil
-                System.out.println(tabla.getValueAt(row, 1));
+                System.out.println(tabla.getValueAt(row, 1)); //con esto se consigue el rut del user seleccionado
                 try {
                     p = new Profile();
                 } catch (IOException ex) {
@@ -619,6 +626,13 @@ public class GUI extends javax.swing.JFrame {
                 vG.setVisible(true);
                 vG.setLocationRelativeTo(null);
                 vG.setBackground(negro2);
+                
+                try {
+                    vG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }else if (column == 6){
                 //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
 

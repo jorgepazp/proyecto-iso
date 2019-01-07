@@ -3,10 +3,15 @@ package isw;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import modelos.Base;
 import modelos.Tabla;
 
 /**
@@ -35,7 +40,9 @@ public class MainFramework {
     private static boolean estadoArduino;
     private static StrArd conArd; // variable que contiene la conexion con el arduino (punto de marcaje
     
-     public static void main(String[] args) throws SQLException, InterruptedException  {
+    private static ArrayList<Base> datos;
+    
+     public static void main(String[] args) throws SQLException, InterruptedException, ParseException, IOException  {
         
         Splash splash = new Splash();
         splash.setVisible(true);
@@ -44,18 +51,25 @@ public class MainFramework {
         System.out.println("Inicializando conexión con BDD");
         StreamBDD sbdd = new StreamBDD();
         GUI gui = new GUI(sbdd);
-        gui.setEstadoLabels(gui.labelEstadoBdd, sbdd.conectarBDD());
+        estadoConnBDD = sbdd.conectarBDD();
+        gui.setEstadoLabels(gui.labelEstadoBdd, estadoConnBDD);
         System.out.println("Base de datos conectada");
        
+         ConstructorDatos c = new ConstructorDatos(sbdd);
+        datos = sbdd.getDatosSistema();
+        gui.setFuenteDeDatos(datos);
        
-         //Constructor de JSON's -- UNUSED
-         
-         //UNUSED ConstructorDatos c = new ConstructorDatos();
-         /*sbdd.getUltimaAsistenciaString("19.462.117-5");*/
+        System.out.println("iniciando pretty print");
+        prettyPrint(datos);
+        System.out.println("fin pretty print");
+        
+        
          gui.renderTabla(sbdd.generaTablas(1));
          //Streaming /Arduino
         StrArd str = new StrArd(sbdd);
+        
         estadoArduino= str.conexionArduino();
+        
         gui.setEstadoLabels(gui.labelEstadoArduino,estadoArduino);
         splash.setVisible(false);
         gui.setVisible(true);
@@ -65,5 +79,16 @@ public class MainFramework {
        */
      }
      
-    
+    public static void prettyPrint( ArrayList<Base> data){
+        for(int i=0;i< data.size();i++){
+            System.out.println("Base n:"+i+1+ " ,Nombre base = "+data.get(i).getBase_nombre());
+            System.out.println("Consiguiendo brigadistas para la base");
+            for(int j=0;j<data.get(i).getBrigadistas().size();j++){
+                System.out.println("Brigadista n°"+j+" en base n°"+i+1);
+                System.out.println(data.get(i).getBrigadistas().get(j).getName());
+                System.out.println("_______________________");
+            }
+            System.out.println("__________________________________________");
+        }
+    }
 }

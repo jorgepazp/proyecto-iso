@@ -5,6 +5,12 @@
  */
 package isw;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author pazjo
@@ -14,11 +20,18 @@ public class Splash extends javax.swing.JFrame {
     /**
      * Creates new form Splash
      */
-    public Splash() {
+    public Splash() throws IOException {
         initComponents();
         this.setLocationRelativeTo(null);
+        setFavicon();
+    }
+    
+    public void setFavicon() throws IOException{
+        Image i = ImageIO.read(getClass().getResource("/images/favicon48.png"));
+        setIconImage(i);
     }
 
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,7 +96,11 @@ public class Splash extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Splash().setVisible(true);
+                try {
+                    new Splash().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Splash.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

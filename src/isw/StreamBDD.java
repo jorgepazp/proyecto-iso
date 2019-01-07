@@ -11,8 +11,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import modelos.Asistencia;
+import modelos.Base;
+import modelos.Brigadista;
 /**
  *
  * @author pazjo
@@ -22,20 +27,22 @@ class StreamBDD {
     Statement stmt = null;
     ResultSet rs = null;
 
+    
+    
     //Retrieves the base id dado el nombre de la misma
     public int getIdBase(String nombreBase) throws SQLException{
-         System.out.println("prueba err");
+        
         conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
         Statement stamt = conn.createStatement();
-        System.out.println("prueba err");
+        
         //Consulta
         String query = "select base_codigo From base " +
         " where base_nombre = '"+nombreBase+"'";
            
         rs=stamt.executeQuery(query);
-        System.out.println("prueba err2");
+        
         while(rs.next()){
-        System.out.println("prueba err3");
+        
             return rs.getInt("base_codigo");
         }
         return 1; 
@@ -250,7 +257,7 @@ class StreamBDD {
         String username = "postgres";
         String password = "";
 
-        Connection conn = null;
+        //Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
 
@@ -365,4 +372,115 @@ class StreamBDD {
         
         System.out.println("flag Driver ");
     }
+    
+    //METODOS GENERADORES DE DATOS PARA EL SW
+    public ArrayList<Base> getDatosSistema() throws SQLException, ParseException{
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        ArrayList<Base> bases = new ArrayList<Base>();
+        stmt = conn.createStatement();
+        rs = stmt.executeQuery("SELECT * from BASE");
+        int codigobase;
+        String nombrebase;
+        String direccionbase;
+        String telefonobase;
+        Base aux = null;
+        
+        while(rs.next()){
+            
+            codigobase = rs.getInt("base_codigo");
+            nombrebase = rs.getString("base_nombre");
+            direccionbase = rs.getString("base_telefono");
+            telefonobase = rs.getString("base_direccion");
+            aux = new Base(codigobase,nombrebase,direccionbase,telefonobase);
+            bases.add(aux);
+            
+        }
+        System.out.println("Bases creadas ("+bases.size()+") , generando brigadistas");
+        for(int i=0;i<bases.size();i++){
+            System.out.println("generando Brigadistas para base n: "+i);
+            aux = bases.get(i);
+            aux.setBrigadistas(generaBrigadistasPorIdBase(aux.getIdBase()));
+        }
+        return bases;
+    } 
+    
+    private ArrayList<Brigadista> generaBrigadistasPorIdBase(int idBase) throws SQLException, ParseException{
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        ArrayList<Brigadista> brigadistas = new ArrayList<Brigadista>();
+        stmt = conn.createStatement();
+        System.out.println("generando brigadista para id de base n : "+idBase);
+        rs = stmt.executeQuery("SELECT * from brigadista "
+                + "where base_codigo = "+idBase);
+        Brigadista aux = null;
+        String rut;
+        String name;
+        String telefono;
+        String nacimiento;
+        String nacionalidad;
+        String email;
+        String direccion;
+        int codigobase;
+        String uuid;
+        while(rs.next()){
+            
+           
+            rut = rs.getString("brigadista_rut");
+            name = rs.getString("brigadista_nombre_completo");
+            telefono = rs.getString("brigadista_telefono");
+            nacimiento = rs.getString("brigadista_rol");
+            nacionalidad = rs.getString("brigadista_nacionalidad");
+            email = rs.getString("brigadista_correo");
+            direccion = rs.getString("brigadista_direccion");
+            uuid = rs.getString("brigadista_uuid");
+            codigobase = rs.getInt("base_codigo");
+            aux = new Brigadista(rut,name,telefono,nacimiento,nacionalidad,email,uuid,direccion,codigobase);
+            brigadistas.add(aux);
+        }
+        
+        for(int i=0;i<brigadistas.size();i++){
+            aux = brigadistas.get(i);
+            aux.setAsistencias(generaAsistenciasPorRutBrigadista(aux.getRut()));
+        }
+        
+        return brigadistas;
+    }
+    
+    private ArrayList<Asistencia> generaAsistenciasPorRutBrigadista(String rut) throws SQLException, ParseException{
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/CEF","postgres","");
+        ArrayList<Asistencia> asistencias = new ArrayList<Asistencia>();
+        stmt = conn.createStatement();
+        System.out.println("Generando asistencias para el rut: "+rut);
+        rs = stmt.executeQuery("SELECT * from asistencia"
+                + " where brigadista_rut = '"+rut+"'");
+        Asistencia aux = null;
+        
+        int id;
+        String _rut;
+        String inicio;
+        String fin;
+        String nota;
+        Date dateFin = null;
+        Date dateInicio = null;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    
+        while(rs.next()){
+            
+            id = rs.getInt("asistencia_codigo");
+            rut = rs.getString("brigadista_rut");
+            inicio = rs.getString("asistencia_marca_inicio");
+            fin = rs.getString("asistencia_marca_fin");
+            nota = rs.getString("asistencia_nota_modificacion");
+            
+            
+            dateInicio = formatter.parse(inicio);
+            if(fin != null){    
+                dateFin = formatter.parse(fin);
+            }else dateFin= null;
+            aux = new Asistencia(id,rut,dateInicio,dateFin,nota);
+            asistencias.add(aux);
+            
+        }
+        return asistencias;
+    }
+    
 }
