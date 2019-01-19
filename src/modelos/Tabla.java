@@ -26,8 +26,8 @@ public class Tabla extends DefaultTableModel {
     
     
     public Tabla(){
-        Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro"};
-        this.setColumnCount(6);
+        Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro","Eliminar Registro"};
+        this.setColumnCount(7);
         this.setColumnIdentifiers(nombresColumnas);
     }
     
@@ -41,6 +41,7 @@ public class Tabla extends DefaultTableModel {
         switch (column) {
             case 0: return ImageIcon.class;
             case 6: return ImageIcon.class;
+            case 7: return ImageIcon.class;
             case 5: return ImageIcon.class;
             default: return Integer.class;
         }

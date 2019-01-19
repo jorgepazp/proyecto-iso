@@ -71,6 +71,7 @@ public class StrArd {
             return true;
         } catch (ArduinoException ex) {
             Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("prueba");
             return false;
         } catch (SerialPortException ex) {
             Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);

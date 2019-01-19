@@ -23,6 +23,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -103,9 +104,11 @@ public class GUI extends javax.swing.JFrame {
             jTabbedPane1.setBorder(BorderFactory.createLineBorder(grid, 1));
             panelModificar.setBackground(negro);
             panelCrear.setBackground(negro);
-            panelEliminar.setBackground(negro);
+           // panelEliminar.setBackground(negro);
             panelBuscar.setBackground(negro);
-            
+            jMenuBar2.setBackground(negro2);
+            jMenuBar2.setForeground(negro2);
+            jMenu4.setForeground(blanco);
             
            tabla.setForeground(Color.LIGHT_GRAY);
            jScrollPane1.setBackground(Color.BLACK);
@@ -122,7 +125,15 @@ public class GUI extends javax.swing.JFrame {
            bddlabel.setForeground(blanco);
            estadoconlabel.setForeground(blanco);
            labelIdBase.setForeground(blanco);
-
+           
+           jCheckBox1.setForeground(blanco);
+           jCheckBox1.setBackground(negro);
+           jCheckBox1.setText("Activo?");
+           jTextField1.setBackground(negro2);
+           jTextField1.setForeground(blanco);
+           comboBases1.setForeground(negro);
+          // jTextField1.setDocument(doc);
+           
            jScrollPane1.getViewport().setBackground(negro);
            jPanel1.setBackground(negro);
            jPanel2.setBackground(negro);
@@ -131,6 +142,8 @@ public class GUI extends javax.swing.JFrame {
           jScrollPane1.getVerticalScrollBar().setBackground(negro);
           comboBases.setBackground(negro);
           comboBases.setForeground(Color.WHITE);
+          comboBases1.setBackground(negro);
+          comboBases1.setForeground(Color.WHITE);
           jPanel3.setBackground(negro);
           labelBuscar.setForeground(blanco);
         tabla.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -150,6 +163,7 @@ public class GUI extends javax.swing.JFrame {
             return l;
         }
     });
+        //tabla.setSelectionMode(DefaultListSelectionMode.SINGLE_SELECTION);
         jTabbedPane1.setUI(new BasicTabbedPaneUI() {
    @Override
    protected void installDefaults() {
@@ -198,13 +212,13 @@ public class GUI extends javax.swing.JFrame {
     public void renderTabla(String[][] data){
        Tabla t = new Tabla();//(Tabla) tabla.getModel();
        
-       Object [] array = new Object[7];
+       Object [] array = new Object[8];
        int i,j;
        
        
        
        for(i=0;i<data.length;i++){
-           for(j=0;j<=6;j++){
+           for(j=0;j<=7;j++){
                
                if(j==1||j==2||j==3||j==4){
                    
@@ -215,6 +229,8 @@ public class GUI extends javax.swing.JFrame {
                    array[j]=v;
                }else if (j==6){                  
                    array[j]=e;
+               }else if (j==7){
+                   array[j]=b;
                }
                
            }
@@ -230,6 +246,10 @@ public class GUI extends javax.swing.JFrame {
             column.setMaxWidth(100);
             column.setPreferredWidth(100);
             column = tabla.getColumnModel().getColumn(6);
+            column.setMinWidth(100);
+            column.setMaxWidth(100);
+            column.setPreferredWidth(100);
+            column = tabla.getColumnModel().getColumn(7);
             column.setMinWidth(100);
             column.setMaxWidth(100);
             column.setPreferredWidth(100);
@@ -279,9 +299,10 @@ public class GUI extends javax.swing.JFrame {
         labelBuscar = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        comboBases1 = new javax.swing.JComboBox<>();
+        jCheckBox1 = new javax.swing.JCheckBox();
         panelCrear = new javax.swing.JPanel();
         panelModificar = new javax.swing.JPanel();
-        panelEliminar = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         estadoconlabel = new javax.swing.JLabel();
         bddlabel = new javax.swing.JLabel();
@@ -296,6 +317,9 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ImageIcon perfil = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
         tabla = new javax.swing.JTable();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Control de Asistencia V1 - Contra el Fuego");
@@ -314,15 +338,15 @@ public class GUI extends javax.swing.JFrame {
             logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel7)
-                .addGap(186, 186, 186))
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(382, 382, 382))
         );
         logoPanelLayout.setVerticalGroup(
             logoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(logoPanelLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Herramientas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(196, 196, 196))); // NOI18N
@@ -348,31 +372,50 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        comboBases1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Concepción", "Pichilemu", "Osorno", "Los Ángeles", "Curicó", "Talca", "Chillan", "Temuco", "Valdivia", "Futrono", " " }));
+        comboBases1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBases1ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBuscarLayout = new javax.swing.GroupLayout(panelBuscar);
         panelBuscar.setLayout(panelBuscarLayout);
         panelBuscarLayout.setHorizontalGroup(
             panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBuscarLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(35, 35, 35)
                 .addComponent(labelBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addComponent(comboBases1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addContainerGap(446, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
         panelBuscarLayout.setVerticalGroup(
             panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBuscarLayout.createSequentialGroup()
-                .addContainerGap(151, Short.MAX_VALUE)
+            .addGroup(panelBuscarLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(labelBuscar)
-                    .addComponent(jButton3))
-                .addContainerGap())
+                    .addComponent(jButton3)
+                    .addComponent(comboBases1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Buscar", panelBuscar);
@@ -381,11 +424,11 @@ public class GUI extends javax.swing.JFrame {
         panelCrear.setLayout(panelCrearLayout);
         panelCrearLayout.setHorizontalGroup(
             panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addGap(0, 882, Short.MAX_VALUE)
         );
         panelCrearLayout.setVerticalGroup(
             panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Crear", panelCrear);
@@ -394,33 +437,20 @@ public class GUI extends javax.swing.JFrame {
         panelModificar.setLayout(panelModificarLayout);
         panelModificarLayout.setHorizontalGroup(
             panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
+            .addGap(0, 882, Short.MAX_VALUE)
         );
         panelModificarLayout.setVerticalGroup(
             panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Editar", panelModificar);
-
-        javax.swing.GroupLayout panelEliminarLayout = new javax.swing.GroupLayout(panelEliminar);
-        panelEliminar.setLayout(panelEliminarLayout);
-        panelEliminarLayout.setHorizontalGroup(
-            panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 968, Short.MAX_VALUE)
-        );
-        panelEliminarLayout.setVerticalGroup(
-            panelEliminarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Borrar", panelEliminar);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 944, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -468,24 +498,8 @@ public class GUI extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(7, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(estadoconlabel)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(arduinolabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(labelEstadoArduino))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(bddlabel)
-                                .addGap(67, 67, 67)
-                                .addComponent(labelEstadoBdd)))))
-                .addGap(65, 65, 65))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addGap(30, 30, 30)
                 .addComponent(baselabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -494,33 +508,49 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(baseidlabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelIdBase))
-                    .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(estadoconlabel)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(arduinolabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelEstadoArduino))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                            .addComponent(bddlabel)
+                            .addGap(67, 67, 67)
+                            .addComponent(labelEstadoBdd))))
+                .addGap(32, 32, 32))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(baselabel)
-                    .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(baseidlabel)
-                    .addComponent(labelIdBase))
-                .addGap(18, 18, 18)
-                .addComponent(estadoconlabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bddlabel)
-                    .addComponent(labelEstadoBdd))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(arduinolabel)
-                    .addComponent(labelEstadoArduino))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(baselabel)
+                            .addComponent(comboBases, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(baseidlabel)
+                            .addComponent(labelIdBase))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(estadoconlabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bddlabel)
+                            .addComponent(labelEstadoBdd))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(arduinolabel)
+                            .addComponent(labelEstadoArduino))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(60, 60, 60)));
@@ -554,33 +584,49 @@ public class GUI extends javax.swing.JFrame {
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane1)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addContainerGap(29, Short.MAX_VALUE))
+                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 247, Short.MAX_VALUE)))
+            .addContainerGap())
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel1Layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+            .addGap(18, 18, 18)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
+
+    jMenu4.setText("Exportar");
+
+    jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+    jMenuItem1.setText("Formato CSV");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItem1ActionPerformed(evt);
+        }
+    });
+    jMenu4.add(jMenuItem1);
+
+    jMenuBar2.add(jMenu4);
+
+    setJMenuBar(jMenuBar2);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,7 +686,23 @@ public class GUI extends javax.swing.JFrame {
                 eG.setResizable(false);
                 eG.setVisible(true);
                 eG.setLocationRelativeTo(null);
+                try {
+                    eG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else if (column == 7){
+                //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
 
+                ErrorGUI err = new ErrorGUI();
+                err.setResizable(false);
+                err.setVisible(true);
+                err.setLocationRelativeTo(null);
+               /* try {
+                   // eG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
+                } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
             }
         }
         tabla.addMouseListener(new MouseAdapter() {
@@ -669,15 +731,14 @@ public class GUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_comboBasesActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
+        showMessageDialog(null,"hoola");
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
 
-        //Si la siguiente condicion se repite es por que no se ha ingresado nada para buscar
-        //
-        if(!jTextField1.equals(null)){
-            String filtro = jTextField1.getText();
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void comboBases1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBases1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBases1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -691,8 +752,22 @@ public class GUI extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+
+        //Si la siguiente condicion se repite es por que no se ha ingresado nada para buscar
+        //
+        if(!jTextField1.equals(null)){
+            String filtro = jTextField1.getText();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
@@ -733,6 +808,7 @@ public class GUI extends javax.swing.JFrame {
     public ImageIcon profile = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
     public    ImageIcon v = new ImageIcon(getClass().getResource("/images/botonver.png"));
     public     ImageIcon e = new ImageIcon(getClass().getResource("/images/botoneditar.png"));
+    private     ImageIcon b = new ImageIcon(getClass().getResource("/images/botoneliminar.png"));
     
     //Colores UI
     Color grid= new Color(60,60,60);
@@ -750,11 +826,16 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel baselabel;
     private javax.swing.JLabel bddlabel;
     private javax.swing.JComboBox<String> comboBases;
+    private javax.swing.JComboBox<String> comboBases1;
     private javax.swing.JLabel estadoconlabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -768,7 +849,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel panelBuscar;
     private javax.swing.JPanel panelCrear;
-    private javax.swing.JPanel panelEliminar;
     private javax.swing.JPanel panelModificar;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables

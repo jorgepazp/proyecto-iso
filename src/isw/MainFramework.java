@@ -67,8 +67,11 @@ public class MainFramework {
          gui.renderTabla(sbdd.generaTablas(1));
          //Streaming /Arduino
         StrArd str = new StrArd(sbdd);
-        
-        estadoArduino= str.conexionArduino();
+        try{
+        estadoArduino= str.conexionArduino();    
+        }catch(Exception e){
+            System.out.println("JIJI");
+        }
         
         gui.setEstadoLabels(gui.labelEstadoArduino,estadoArduino);
         splash.setVisible(false);

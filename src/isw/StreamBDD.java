@@ -67,7 +67,7 @@ class StreamBDD {
         
         int filas = rs.getRow();
         String aux = null; 
-        String [][]data = new String[filas][7];
+        String [][]data = new String[filas][8];
        
         //COLUMNAS
         /*

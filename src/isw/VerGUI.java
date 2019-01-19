@@ -57,12 +57,12 @@ public class VerGUI extends javax.swing.JFrame {
         jTextArea1.setFont(font);
         
         this.labelHorarioNormal1.setForeground(blanco);
-        this.labelHorarioNormal.setForeground(blanco);
+        //this.labelHorarioNormal.setForeground(blanco);
         this.jLabel1.setForeground(blanco);
         this.jLabel2.setForeground(blanco);
         this.jLabel3.setForeground(blanco);
-        this.jLabel4.setForeground(blanco);
-        this.jLabel5.setForeground(blanco);
+       // this.jLabel4.setForeground(blanco);
+        //this.jLabel5.setForeground(blanco);
         this.jLabel6.setForeground(blanco);
         this.jLabel7.setForeground(blanco); 
         }
@@ -100,6 +100,14 @@ public class VerGUI extends javax.swing.JFrame {
             setDatosEnGui(brig.getAsistencias().get(0).getId(),brig);
         }else{
             //MOSTRAR A USUARIO QUE EL BRIGADISTA NO POSEE REGISTROS
+            
+            //this.setVisible(false);
+            ErrorGUI err = new ErrorGUI();
+            err.setErrorMessage("Brigadista no posee registros");
+            err.setVisible(true);
+            err.setLocationRelativeTo(null);
+            
+       
         }
     }
     
@@ -108,18 +116,30 @@ public class VerGUI extends javax.swing.JFrame {
     private void setDatosEnGui(int target, Brigadista brig){
         try{
             Asistencia aux = getAsistenciaById(target,brig);
-            this.jLabel4.setText(aux.getHorarioDeInicio());
-            System.out.println("Seteada label 4");
+
             this.jLabel6.setText(aux.getHorarioDeInicio());
             System.out.println("Seteada label 6");
-            this.jLabel5.setText(aux.getHorarioDeFin());
-            System.out.println("Seteada label 5 con "+aux.getHorarioDeFin());
+
             this.jLabel7.setText(aux.getHorarioDeFin());
             System.out.println("Seteada label 7");
         }catch(Exception e){
             System.out.println("no se encontró marcaje de salida para el brigadista");
             //e.printStackTrace();
-            this.jLabel5.setText("--:--:--");
+
+            this.jLabel7.setText("--:--:--");
+        }
+    }
+    
+    private void setDatosEnGui(String target, Brigadista brig){
+        try{
+            Asistencia aux = getAsistenciaByFechaInicio(target,brig);
+            this.jLabel6.setText(aux.getHorarioDeInicio());
+            System.out.println("Seteada label 6");
+            this.jLabel7.setText(aux.getHorarioDeFin());
+            System.out.println("Seteada label 7");
+        }catch(Exception e){
+            System.out.println("no se encontró marcaje de salida para el brigadista");
+            //e.printStackTrace();
             this.jLabel7.setText("--:--:--");
         }
     }
@@ -134,6 +154,25 @@ public class VerGUI extends javax.swing.JFrame {
             
             for(int i= 0;i<aux.size();i++){
                 if(aux.get(i).getId() == target){
+                    return brig.getAsistencias().get(i);
+                }
+            }
+        }
+        return null;
+    }
+    
+    /*El siguiente metodo devuelve una instancia de ASistencia dado una instancia
+    de un Brigadista y una Id de Asistencia, si no encuentra match devuelve null*/
+    private Asistencia getAsistenciaByFechaInicio(String target,Brigadista brig){
+        if(brig.getAsistencias()!=null){
+            //como la lista de asistencias de este brigadista <brig>
+            //podemos buscar la asistencia <target> del brigadista
+            ArrayList<Asistencia> aux = brig.getAsistencias();
+            String fecha;
+            
+            for(int i= 0;i<aux.size();i++){
+                
+                if(aux.get(i).getFechaDeInicio().equals(target)){
                     return brig.getAsistencias().get(i);
                 }
             }
@@ -171,12 +210,9 @@ public class VerGUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        labelHorarioNormal = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -193,6 +229,7 @@ public class VerGUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jList1ValueChanged(evt);
@@ -206,32 +243,24 @@ public class VerGUI extends javax.swing.JFrame {
 
         jLabel1.setText("Horario Marcado :");
 
-        labelHorarioNormal.setText("Horario normal :");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(43, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(labelHorarioNormal, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addComponent(jLabel1)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(labelHorarioNormal)
-                .addGap(18, 18, 18)
+                .addGap(48, 48, 48)
                 .addComponent(jLabel1)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel4.setText("8:00 ");
 
         jLabel6.setText("7:59:26.4");
 
@@ -241,24 +270,18 @@ public class VerGUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel4))
+                .addComponent(jLabel6)
                 .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addGap(46, 46, 46)
                 .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel5.setText("18:30 ");
 
         jLabel7.setText("18:46:36.2");
 
@@ -268,17 +291,13 @@ public class VerGUI extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel7))
+                .addComponent(jLabel7)
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -395,8 +414,8 @@ public class VerGUI extends javax.swing.JFrame {
         
         System.out.println("seleccionaste el elemento "+this.jList1.getSelectedValue());
        // System.out.println("seleccionaste el elemento "+this.jList1.getComponent(this.jList1.getSelectedIndex()).toString());
-        
-//this.jList1.get
+        setDatosEnGui(this.jList1.getSelectedValue(),cache);
+      // Asistencia a = (Asistencia) this.ge();
         
     }//GEN-LAST:event_jList1ValueChanged
 
@@ -442,8 +461,6 @@ public class VerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JList<String> jList1;
@@ -456,7 +473,6 @@ public class VerGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel labelHorarioNormal;
     private javax.swing.JLabel labelHorarioNormal1;
     // End of variables declaration//GEN-END:variables
 }

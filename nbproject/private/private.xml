@@ -5,7 +5,7 @@
             <url>src/isw/GUI.java</url>
             <bookmark id="1">
                 <name/>
-                <line>682</line>
+                <line>799</line>
                 <key/>
             </bookmark>
         </file>
@@ -14,14 +14,13 @@
         <group>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/EditGUI.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/VerGUI.java</file>
-            <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/modelos/Base.java</file>
+            <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/Validators.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/StreamBDD.java</file>
-            <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/Profile.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/modelos/Asistencia.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/StrArd.java</file>
+            <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/modelos/Brigadista.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/MainFramework.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/isw/GUI.java</file>
-            <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/modelos/Registro.java</file>
             <file>file:/C:/Users/pazjo/Documents/NetBeansProjects/CEF/src/modelos/Tabla.java</file>
         </group>
     </open-files>

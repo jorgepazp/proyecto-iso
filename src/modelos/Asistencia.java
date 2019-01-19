@@ -81,6 +81,18 @@ public class Asistencia {
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         return formatter.format(_inicio);
     }
+    
+    /*
+    El siguiente metodo se diferencia en el tipo de fecha que utiliza, pues devuelve la fecha pero en formato
+    dia, mes , año
+    */
+    public String getFechaDeInicio(){
+        
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(_inicio);
+    }
+    
+    
     public String getHorarioDeFin(){
         
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
