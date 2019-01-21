@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -64,8 +67,8 @@ public class EditGUI extends javax.swing.JFrame {
         this.jLabel3.setForeground(blanco);
         this.jLabel4.setForeground(blanco);
         //this.jLabel5.setForeground(blanco);
-        this.jTextField1.setBackground(blanco);
-        this.jTextField2.setBackground(blanco);
+        this.jFormattedTextField2.setBackground(blanco);
+        
         this.jLabel6.setForeground(blanco);
         this.jLabel7.setForeground(blanco); 
         }
@@ -109,7 +112,7 @@ public class EditGUI extends javax.swing.JFrame {
             err.setErrorMessage("Brigadista no posee registros");
             err.setVisible(true);
             err.setLocationRelativeTo(null);
-            
+            guardar.setEnabled(false);
        
         }
     }
@@ -140,6 +143,7 @@ public class EditGUI extends javax.swing.JFrame {
             System.out.println("Seteada label 6");
             this.jLabel7.setText(aux.getHorarioDeFin());
             System.out.println("Seteada label 7");
+            this.jTextArea1.setText(aux.getNota());
         }catch(Exception e){
             System.out.println("no se encontró marcaje de salida para el brigadista");
             //e.printStackTrace();
@@ -193,6 +197,7 @@ public class EditGUI extends javax.swing.JFrame {
         model.addElement( a.getFechaAsistencia());
         }
         this.jList1.setModel(model);
+        jList1.setSelectedIndex(0);
         
     }
     
@@ -216,10 +221,10 @@ public class EditGUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jFormattedTextField2 = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -256,28 +261,37 @@ public class EditGUI extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(43, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel1))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel6.setText("7:59:26.4");
 
-        jTextField1.setText("jTextField1");
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tooltip.png"))); // NOI18N
+        jLabel5.setToolTipText("No se puede modificar el horario de entrada marcado.");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -286,27 +300,31 @@ public class EditGUI extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 81, Short.MAX_VALUE))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel5)))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel7.setText("18:46:36.2");
 
-        jTextField2.setText("jTextField2");
+        try {
+            jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -315,11 +333,9 @@ public class EditGUI extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jLabel7)
+                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,8 +343,8 @@ public class EditGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jFormattedTextField2)
+                .addContainerGap())
         );
 
         jLabel2.setText("ENTRADA");
@@ -366,6 +382,11 @@ public class EditGUI extends javax.swing.JFrame {
         );
 
         guardar.setText("Guardar");
+        guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -455,6 +476,64 @@ public class EditGUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jList1ValueChanged
 
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        // TODO add your handling code here:
+        //jLabel5.
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    public void setConexion(StreamBDD bdd){
+        this.sbdd=bdd;
+    }
+    
+    private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        // TODO add your handling code here:
+        //
+        Validators validador = new Validators();
+        String horarioNuevo = this.jFormattedTextField2.getText();
+        String horarioMarcado = this.jLabel7.getText();
+        String fechaMarcaje = this.jList1.getSelectedValue().toString();
+        
+        String textoNota = this.jTextArea1.getText();
+        if(validador.isValidInput(horarioNuevo.split(":"))){
+            System.out.println("horario nuevo "+horarioNuevo);
+            System.out.println("HOrario marcado "+horarioMarcado);
+            if(horarioMarcado.equals("--:--:--")){
+                try {
+                    //hacerCambio y setear como inactivo a brigadista
+                    System.out.println("adsfsaffs");
+                    sbdd.updateHorario(instanciaRut,horarioNuevo,fechaMarcaje,textoNota);
+                    sbdd.setInactivo(instanciaRut);
+                
+                    setCambiosOnEdit(horarioNuevo,textoNota);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }else if (validador.isValidInputHorarioSalida(horarioMarcado, horarioNuevo)){
+                try {
+                    sbdd.updateHorario(instanciaRut,horarioNuevo,fechaMarcaje,textoNota);
+                    setCambiosOnEdit(horarioNuevo,textoNota);
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+            
+        }else{
+            ErrorGUI error = new ErrorGUI();
+            error.setErrorMessage("<html>El número ingresado no es valido<br/>Intente nuevamente.</html>");
+            error.setVisible(true);
+            error.setResizable(false);
+            error.setLocationRelativeTo(null);
+        }
+            
+        
+    }//GEN-LAST:event_guardarActionPerformed
+    
+    private void setCambiosOnEdit(String horario,String nota){
+        this.jLabel7.setText(horario);
+        this.jTextArea1.setText(nota);
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -494,12 +573,16 @@ public class EditGUI extends javax.swing.JFrame {
     Color negro1= new Color(43,43,43);
     Color negro = new Color(27,27,27);
     Color blanco = new Color(196,196,196);
+    private StreamBDD sbdd;
+    private String instanciaRut;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton guardar;
+    private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JList<String> jList1;
@@ -512,8 +595,10 @@ public class EditGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel labelHorarioNormal1;
     // End of variables declaration//GEN-END:variables
+
+    void setRutInstancia(String toString) {
+        this.instanciaRut=toString;
+    }
 }

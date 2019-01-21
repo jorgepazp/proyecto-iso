@@ -14,22 +14,28 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.MaskFormatter;
 import modelos.Base;
 import modelos.Tabla;
 
@@ -42,6 +48,7 @@ public class GUI extends javax.swing.JFrame {
 
  
     private ArrayList<Base> data = new ArrayList<Base>();
+
     /**
      * Creates new form GUI
      */
@@ -63,7 +70,8 @@ public class GUI extends javax.swing.JFrame {
     public GUI(StreamBDD bdd) {
         this.sbdd = bdd;
         initComponents();
-        
+        this.validator = new Validators();
+
         try {
             setFavicon();
         } catch (IOException ex) {
@@ -75,12 +83,33 @@ public class GUI extends javax.swing.JFrame {
         setModeloTabla();
         this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
         
-        
-        
-       
-           // tabla.setFont(new Font("Tahoma", Font.BOLD, 20));
+  // tabla.setFont(new Font("Tahoma", Font.BOLD, 20));
            setTemaUI();
     }   
+    
+    public void setModeloComboBases() throws SQLException{
+        ArrayList<String> listaUuid =  sbdd.getListaBases();
+      //listaUuid.add(0, uuid);
+      String[] label = new String[listaUuid.size()];
+      label = listaUuid.toArray(label);
+      DefaultComboBoxModel model = new DefaultComboBoxModel(label);
+       comboBases.setModel(model);
+       setModeloComboBuscar();
+    }
+    
+    private void setModeloComboBuscar() throws SQLException{
+        ArrayList<String> listaUuid = null;
+        try {
+            listaUuid = sbdd.getListaBases();
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      //listaUuid.add(0, uuid);
+      String[] label = new String[listaUuid.size()];
+      label = listaUuid.toArray(label);
+      DefaultComboBoxModel model = new DefaultComboBoxModel(label);
+       comboBases1.setModel(model);
+    }
     
     //El siguiente metodo le da los datos al gui para usarlos en verGui y EditarGui entre otros
     public void setFuenteDeDatos(ArrayList<Base> datos){
@@ -93,30 +122,45 @@ public class GUI extends javax.swing.JFrame {
           
             jButton3.setBackground(negro1);
             jButton3.setForeground(blanco);
+            jButton4.setBackground(negro1);
+            jButton4.setForeground(blanco);
+            jButton5.setBackground(negro1);
+            jButton5.setForeground(blanco);
           
+            jButton6.setBackground(negro1);
+            jButton6.setForeground(blanco);
+            jLabel5.setForeground(blanco);
+          
+            jTextField1.setBackground(negro1);
+            jTextField1.setForeground(blanco);
             jButton2.setBackground(negro1);
             jButton2.setForeground(blanco);
             jButton2.setEnabled(false);
+            jButton1.setEnabled(true);
+    
+        
 
+            jCheckBox1.setSelected(true);
             
             jTabbedPane1.setBackground(negro);
             jTabbedPane1.setForeground(grid);
             jTabbedPane1.setBorder(BorderFactory.createLineBorder(grid, 1));
-            panelModificar.setBackground(negro);
+            //panelModificar.setBackground(negro);
             panelCrear.setBackground(negro);
            // panelEliminar.setBackground(negro);
             panelBuscar.setBackground(negro);
             jMenuBar2.setBackground(negro2);
             jMenuBar2.setForeground(negro2);
-            jMenu4.setForeground(blanco);
-            
+//            jMenu4.setForeground(blanco);
+            panelCrear1.setVisible(false);
+
            tabla.setForeground(Color.LIGHT_GRAY);
            jScrollPane1.setBackground(Color.BLACK);
            jScrollPane1.setForeground(Color.red);
            
-           jButton1.setBackground(negro2);
+           jButton1.setBackground(negro1);
            jButton1.setForeground(blanco);
-           
+          // jFormattedTextField1.setVisible(false);
             tabla.setGridColor(grid);
             tabla.setBackground(negro1);
            arduinolabel.setForeground(blanco);
@@ -125,15 +169,21 @@ public class GUI extends javax.swing.JFrame {
            bddlabel.setForeground(blanco);
            estadoconlabel.setForeground(blanco);
            labelIdBase.setForeground(blanco);
-           
+           jLabel3.setForeground(blanco);
+           jLabel4.setForeground(blanco);
+           panelCrear1.setBackground(negro);
            jCheckBox1.setForeground(blanco);
            jCheckBox1.setBackground(negro);
            jCheckBox1.setText("Activo?");
-           jTextField1.setBackground(negro2);
-           jTextField1.setForeground(blanco);
+          // jFormattedTextField1.setBackground(negro2);
+         //  jFormattedTextField1.setForeground(blanco);
            comboBases1.setForeground(negro);
           // jTextField1.setDocument(doc);
            
+          jLabel2.setVisible(false);
+          jButton5.setVisible(false);
+          jButton2.setVisible(false);
+          
            jScrollPane1.getViewport().setBackground(negro);
            jPanel1.setBackground(negro);
            jPanel2.setBackground(negro);
@@ -295,14 +345,14 @@ public class GUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         panelBuscar = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
         labelBuscar = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         comboBases1 = new javax.swing.JComboBox<>();
         jCheckBox1 = new javax.swing.JCheckBox();
-        panelCrear = new javax.swing.JPanel();
-        panelModificar = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         estadoconlabel = new javax.swing.JLabel();
         bddlabel = new javax.swing.JLabel();
@@ -317,9 +367,15 @@ public class GUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         ImageIcon perfil = new ImageIcon(getClass().getResource("/images/defaultprofile.png"));
         tabla = new javax.swing.JTable();
+        panelCrear = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        panelCrear1 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Control de Asistencia V1 - Contra el Fuego");
@@ -346,16 +402,17 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logoPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(16, 16, 16))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Herramientas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(196, 196, 196))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
         labelBuscar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        labelBuscar.setText("Buscar por RUT:");
+        labelBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lupa.png"))); // NOI18N
+        labelBuscar.setText("Buscar brigadista");
 
         jButton1.setText("Buscar");
         jButton1.setEnabled(false);
@@ -385,66 +442,75 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
+        jLabel3.setText("RUT (xx.xxx.xxx-x)");
+        jLabel3.setToolTipText("");
+
+        jLabel4.setText("Base");
+
         javax.swing.GroupLayout panelBuscarLayout = new javax.swing.GroupLayout(panelBuscar);
         panelBuscar.setLayout(panelBuscarLayout);
         panelBuscarLayout.setHorizontalGroup(
             panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBuscarLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(29, 29, 29)
                 .addComponent(labelBuscar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(comboBases1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 668, Short.MAX_VALUE))
+            .addGroup(panelBuscarLayout.createSequentialGroup()
+                .addGap(146, 146, 146)
+                .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addGap(28, 28, 28))
+                .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBuscarLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelBuscarLayout.createSequentialGroup()
+                        .addComponent(comboBases1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addGap(31, 31, 31))))
         );
         panelBuscarLayout.setVerticalGroup(
             panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBuscarLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addContainerGap()
+                .addComponent(labelBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(labelBuscar)
-                    .addComponent(jButton3)
-                    .addComponent(comboBases1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(panelBuscarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCheckBox1)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(comboBases1)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Buscar", panelBuscar);
-
-        javax.swing.GroupLayout panelCrearLayout = new javax.swing.GroupLayout(panelCrear);
-        panelCrear.setLayout(panelCrearLayout);
-        panelCrearLayout.setHorizontalGroup(
-            panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 882, Short.MAX_VALUE)
-        );
-        panelCrearLayout.setVerticalGroup(
-            panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Crear", panelCrear);
-
-        javax.swing.GroupLayout panelModificarLayout = new javax.swing.GroupLayout(panelModificar);
-        panelModificar.setLayout(panelModificarLayout);
-        panelModificarLayout.setHorizontalGroup(
-            panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 882, Short.MAX_VALUE)
-        );
-        panelModificarLayout.setVerticalGroup(
-            panelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Editar", panelModificar);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -578,6 +644,88 @@ public class GUI extends javax.swing.JFrame {
     });
     jScrollPane1.setViewportView(tabla);
 
+    panelCrear.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+    jButton4.setText("Crear Brigadista");
+    jButton4.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton4ActionPerformed(evt);
+        }
+    });
+
+    jButton5.setText("Crear Base");
+
+    jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add.png"))); // NOI18N
+
+    jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addBase.png"))); // NOI18N
+
+    javax.swing.GroupLayout panelCrearLayout = new javax.swing.GroupLayout(panelCrear);
+    panelCrear.setLayout(panelCrearLayout);
+    panelCrearLayout.setHorizontalGroup(
+        panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCrearLayout.createSequentialGroup()
+            .addGap(106, 106, 106)
+            .addGroup(panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jButton4)
+                .addGroup(panelCrearLayout.createSequentialGroup()
+                    .addGap(17, 17, 17)
+                    .addComponent(jLabel1)))
+            .addGap(33, 33, 33)
+            .addGroup(panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jButton5)
+                .addComponent(jLabel2))
+            .addContainerGap(94, Short.MAX_VALUE))
+    );
+    panelCrearLayout.setVerticalGroup(
+        panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCrearLayout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(panelCrearLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jButton4)
+                .addComponent(jButton5))
+            .addGap(16, 16, 16))
+    );
+
+    panelCrear1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+    jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/export.png"))); // NOI18N
+    jButton6.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton6ActionPerformed(evt);
+        }
+    });
+
+    jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+    jLabel5.setText("Exportar CSV");
+
+    javax.swing.GroupLayout panelCrear1Layout = new javax.swing.GroupLayout(panelCrear1);
+    panelCrear1.setLayout(panelCrear1Layout);
+    panelCrear1Layout.setHorizontalGroup(
+        panelCrear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(panelCrear1Layout.createSequentialGroup()
+            .addGroup(panelCrear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelCrear1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelCrear1Layout.createSequentialGroup()
+                    .addGap(14, 14, 14)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addContainerGap())
+    );
+    panelCrear1Layout.setVerticalGroup(
+        panelCrear1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCrear1Layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel5)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jButton6)
+            .addGap(17, 17, 17))
+    );
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -591,7 +739,12 @@ public class GUI extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 247, Short.MAX_VALUE)))
+                    .addComponent(logoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(panelCrear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(panelCrear1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 1213, Short.MAX_VALUE)))
             .addContainerGap())
     );
     jPanel1Layout.setVerticalGroup(
@@ -601,24 +754,15 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                .addComponent(logoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
             .addGap(18, 18, 18)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(panelCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelCrear1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addContainerGap())
     );
-
-    jMenu4.setText("Exportar");
-
-    jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-    jMenuItem1.setText("Formato CSV");
-    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItem1ActionPerformed(evt);
-        }
-    });
-    jMenu4.add(jMenuItem1);
-
-    jMenuBar2.add(jMenu4);
 
     setJMenuBar(jMenuBar2);
 
@@ -630,12 +774,15 @@ public class GUI extends javax.swing.JFrame {
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(layout.createSequentialGroup()
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(0, 0, Short.MAX_VALUE))
     );
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //HERRAMIENTAS EN TABLA
     //listener abre perfiles
     private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
         // TODO add your handling code here:
@@ -652,6 +799,7 @@ public class GUI extends javax.swing.JFrame {
                 System.out.println(tabla.getValueAt(row, 1)); //con esto se consigue el rut del user seleccionado
                 try {
                     p = new Profile();
+                    p.setConexion(sbdd);
                 } catch (IOException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -674,8 +822,12 @@ public class GUI extends javax.swing.JFrame {
                 vG.setBackground(negro2);
                 
                 try {
-                    vG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
+                    vG.doChores(sbdd.getDatosSistema(), Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
                 } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
@@ -683,21 +835,40 @@ public class GUI extends javax.swing.JFrame {
                 //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
 
                 eG= new EditGUI();
+                eG.setConexion(sbdd);
+                eG.setRutInstancia(tabla.getValueAt(row, 1).toString());
                 eG.setResizable(false);
                 eG.setVisible(true);
                 eG.setLocationRelativeTo(null);
                 try {
-                    eG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
+                    eG.doChores(sbdd.getDatosSistema(), Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
                 } catch (IOException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
                     Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }else if (column == 7){
-                //Si la columna es 5, es por que se selecciono editar los registros de algun usuario
+                //Si la columna es 7, es por que se selecciono borrar un usuario
 
-                ErrorGUI err = new ErrorGUI();
+                BorrarGUI err = new BorrarGUI(this.sbdd);
+                String text = "Estás a punto de borrar a "+tabla.getValueAt(row, 1).toString();
+                err.cambiarLabel(text,tabla.getValueAt(row, 1).toString());
                 err.setResizable(false);
                 err.setVisible(true);
                 err.setLocationRelativeTo(null);
+                
+                
+                    
+              
+                
+                err.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                        actualizarTabla();
+                    }
+                });
                /* try {
                    // eG.doChores(data, Integer.parseInt(labelIdBase.getText()), tabla.getValueAt(row, 1).toString());
                 } catch (IOException ex) {
@@ -733,7 +904,8 @@ public class GUI extends javax.swing.JFrame {
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         // TODO add your handling code here:
-        showMessageDialog(null,"hoola");
+
+        //showMessageDialog(null,"hoola");
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void comboBases1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBases1ActionPerformed
@@ -742,7 +914,12 @@ public class GUI extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        String nombrebase = comboBases.getSelectedItem().toString();
+        actualizarTabla();
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void actualizarTabla(){
+         String nombrebase = comboBases.getSelectedItem().toString();
         System.out.println(nombrebase+" -< nombre base");
         int id;
         try {
@@ -753,21 +930,92 @@ public class GUI extends javax.swing.JFrame {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jButton3ActionPerformed
-
+    }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
         //Si la siguiente condicion se repite es por que no se ha ingresado nada para buscar
         //
-        if(!jTextField1.equals(null)){
-            String filtro = jTextField1.getText();
-        }
+        String inputBusqueda = jTextField1.getText();
+        System.out.println(inputBusqueda);
+        String rutBruto = validator.getRutEnBruto(inputBusqueda);
+        System.out.println("safafs "+rutBruto);
+       
+      try{
+          Profile busqueda = new Profile();
+          System.out.println("Set todo");
+          System.out.println(comboBases1.getSelectedItem().toString());
+          busqueda.hideEditar();
+          
+          String [] datos = sbdd.getDatosByRut(inputBusqueda,comboBases1.getSelectedItem().toString(),jCheckBox1.isSelected());
+          System.out.println(datos);
+          if(!(datos == null)){
+                busqueda.setTodo(datos);
+                System.out.println("Visibleando");
+                busqueda.setVisible(true);
+                busqueda.setResizable(false);
+        }else{
+              noHayResultados();
+          }
+      }catch(Exception e){
+          e.printStackTrace();
+            noHayResultados();
+         
+      }
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void noHayResultados(){
+        error = new ErrorGUI();
+         error.setErrorMessage("<html>No se han encontrado resultados<br/>Verifica que has ingresado bien los parámetros de búsqueda</html>");
+         error.setVisible(true);
+         error.setResizable(false);
+         error.setLocationRelativeTo(null);
+    }
+    
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+
+        
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        CrearBrigadista nuevo = null;
+        try {
+            nuevo = new CrearBrigadista();
+        } catch (IOException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         nuevo.setVisible(true);
+         nuevo.setResizable(false);
+         nuevo.setLocationRelativeTo(null);
+         nuevo.setConexion(sbdd);
+         try {
+            
+            nuevo.setCombos();
+        } catch (SQLException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        // TODO add your handling code here:
+        String aux = jTextField1.getText();
+        //jTextField1.setText(validator.rutify(aux));
+       if(aux.length()>=12){
+           evt.consume();
+       }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     public static void main(String args[]) throws IOException {
         /* Set the Nimbus look and feel */
@@ -810,6 +1058,30 @@ public class GUI extends javax.swing.JFrame {
     public     ImageIcon e = new ImageIcon(getClass().getResource("/images/botoneditar.png"));
     private     ImageIcon b = new ImageIcon(getClass().getResource("/images/botoneliminar.png"));
     
+    /**
+     *  FORMATEADORES (JFORMATTEDTEXTFIELDS Y ESO)
+     * DEPRECATED
+     *
+        private void formateadores(){
+            try {
+            MaskFormatter formateador = new MaskFormatter("##.###.###-A");
+           // formateador.setPlaceholder("RUT");
+            formateador.setValidCharacters(" 0123456789kK");
+            //formateador.setPlaceholder("holaaa");
+            
+          //  jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(formateador));
+           
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        }
+    
+     
+     * FIN FORMATEADORES (JFORMATTEDTEXTFIELDS Y ESO)
+     * 
+     */
+    
     //Colores UI
     Color grid= new Color(60,60,60);
     Color negro2= new Color(23,23,23);
@@ -817,9 +1089,11 @@ public class GUI extends javax.swing.JFrame {
     Color negro = new Color(27,27,27);
     Color blanco = new Color(196,196,196);
     
+    private Validators validator;
     public EditGUI eG;
     public VerGUI vG;
     public Profile p;
+    private ErrorGUI error;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel arduinolabel;
     private javax.swing.JLabel baseidlabel;
@@ -831,14 +1105,21 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField1;
@@ -849,7 +1130,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel logoPanel;
     private javax.swing.JPanel panelBuscar;
     private javax.swing.JPanel panelCrear;
-    private javax.swing.JPanel panelModificar;
+    private javax.swing.JPanel panelCrear1;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

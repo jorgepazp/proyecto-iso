@@ -8,6 +8,7 @@ package isw;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -36,17 +37,26 @@ public class Profile extends javax.swing.JFrame {
            Color negro1= new Color(43,43,43);
            Color negro = new Color(27,27,27);
            Color blanco = new Color(196,196,196);
+    private StreamBDD sbdd;
+    public void setConexion(StreamBDD con){
+        sbdd = con;
+    }       
+    
+    public void hideEditar(){
+        this.jButton1.setVisible(false);
+    }
+    
     public Profile() throws IOException {
         initComponents();
         setUI();
         setFavicon();
         
     }
-
+    private String [] data;
     public void setTodo(String [] datos){
-
+        data = datos;
     
-   
+        
         setRut(datos[0]);
         setNombre(datos[1]);
         setDir( datos[2]);
@@ -67,6 +77,8 @@ public class Profile extends javax.swing.JFrame {
         jNat.setForeground(blanco);
         jNum.setForeground(blanco);
         jRut.setForeground(blanco);
+        jButton1.setBackground(negro2);
+        jButton1.setForeground(blanco);
         
         jLabel2.setForeground(blanco);
         jLabel3.setForeground(blanco);
@@ -189,6 +201,7 @@ public class Profile extends javax.swing.JFrame {
         jNum = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Perfil de Usuario");
@@ -228,6 +241,13 @@ public class Profile extends javax.swing.JFrame {
 
         jLabel11.setText("(000 , 000, 000, 000)");
 
+        jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -245,7 +265,9 @@ public class Profile extends javax.swing.JFrame {
                             .addComponent(jLabel4)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(94, 94, 94)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,13 +287,15 @@ public class Profile extends javax.swing.JFrame {
                             .addComponent(jCor)
                             .addComponent(jNum)
                             .addComponent(jRut))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jName)
                 .addGap(13, 13, 13)
@@ -323,6 +347,27 @@ public class Profile extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        ProfileEditar edit = null;
+        try {
+            edit = new ProfileEditar();
+        } catch (IOException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        edit.setTodo(data);
+        edit.setVisible(true);
+        edit.setConexion(sbdd);
+        edit.setResizable(false);
+        try {
+            edit.setCombos();
+        } catch (SQLException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        edit.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -364,6 +409,7 @@ public class Profile extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jCor;
     private javax.swing.JLabel jDir;
     private javax.swing.JLabel jLabel1;

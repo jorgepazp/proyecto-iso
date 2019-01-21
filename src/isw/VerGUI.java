@@ -89,7 +89,6 @@ public class VerGUI extends javax.swing.JFrame {
         this.cache = brig;
         this.indiceBase = index;
         this.rutCache = rut;
-        System.out.println("la instancia para el brigadista es "+brig);
         setJList(brig.getListaReversed());
         this.setTitle("Viendo registros de: "+ brig.getName());
         setFavicon();
@@ -122,6 +121,7 @@ public class VerGUI extends javax.swing.JFrame {
 
             this.jLabel7.setText(aux.getHorarioDeFin());
             System.out.println("Seteada label 7");
+            this.jTextArea1.setText(aux.getNota());
         }catch(Exception e){
             System.out.println("no se encontró marcaje de salida para el brigadista");
             //e.printStackTrace();

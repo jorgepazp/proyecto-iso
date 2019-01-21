@@ -26,7 +26,7 @@ public class Asistencia {
         this._rut = rut;
         this._inicio = ini;
         this._fin = fin;
-        this._rut = note;
+        this.nota = note;
     }
     public String getFechaAsistencia(){
         DateFormat df = new SimpleDateFormat("YYYY-MM-dd");

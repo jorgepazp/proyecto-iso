@@ -52,9 +52,10 @@ public class MainFramework {
         StreamBDD sbdd = new StreamBDD();
         GUI gui = new GUI(sbdd);
         estadoConnBDD = sbdd.conectarBDD();
+        
         gui.setEstadoLabels(gui.labelEstadoBdd, estadoConnBDD);
         System.out.println("Base de datos conectada");
-       
+       gui.setModeloComboBases();
          ConstructorDatos c = new ConstructorDatos(sbdd);
         datos = sbdd.getDatosSistema();
         gui.setFuenteDeDatos(datos);
@@ -64,7 +65,7 @@ public class MainFramework {
         System.out.println("fin pretty print");
         
         
-         gui.renderTabla(sbdd.generaTablas(1));
+        gui.renderTabla(sbdd.generaTablas(1));
          //Streaming /Arduino
         StrArd str = new StrArd(sbdd);
         try{

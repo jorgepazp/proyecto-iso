@@ -26,7 +26,7 @@ public class Tabla extends DefaultTableModel {
     
     
     public Tabla(){
-        Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro","Eliminar Registro"};
+        Object[] nombresColumnas = {"Perfil","RUT","Nombre","Estado","Último registro","Ver Registro","Editar Registro","Borrar Brigadista"};
         this.setColumnCount(7);
         this.setColumnIdentifiers(nombresColumnas);
     }
