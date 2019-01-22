@@ -167,7 +167,7 @@ class StreamBDD {
         //Si el rut Asociado a la tarjeta existe, debemos registrar la asistencia
         if(!(rutAsociado == null)){
         System.out.println("Rut Asociado a tarjeta con UUID: "+UUID);
-        if(!haMarcadoAntes(date,rutAsociado)){
+        //if(!haMarcadoAntes(date,rutAsociado)){
             System.out.println(isActivo(rutAsociado));
             if(isActivo(rutAsociado)){
             //Si está activo,debemos cerrar la ultima asistencia perteneciente al brigadista
@@ -178,6 +178,7 @@ class StreamBDD {
                 stmt.execute(query);
                 //por ultimo, ahora debemos setear el estado del brigadista como inactivo (ya que termino el turno)
                 setEstadoActivo(false,rutAsociado);
+                
             }else{
             //Si está inactivo debemos crear una nueva asistencia registrada al brigadista
             //COnsulta
@@ -190,7 +191,7 @@ class StreamBDD {
                 //el brigadista en cuestión
                 setEstadoActivo(true,rutAsociado);
             }
-        }
+        //}
         System.out.println("Registrando asistencia para : "+ rutAsociado);
         
         }else System.out.println("Ningun rut asociado a tarjeta!");
@@ -520,11 +521,11 @@ class StreamBDD {
     void updateHorario(String instanciaRut, String horarioNuevo,String fechaMarcaje,String nota) throws SQLException {
         String query = "UPDATE asistencia\n" +
         "SET asistencia_marca_fin = TIMESTAMP '"+fechaMarcaje+" "+horarioNuevo+"'\n , asistencia_nota_modificacion = '" +
-        nota+"' where brigadista_rut in (select b.brigadista_rut from brigadista b, asistencia q\n" +
+        nota+"' where asistencia_codigo in (select q.asistencia_codigo from brigadista b, asistencia q\n" +
         "WHERE b.brigadista_rut = '"+instanciaRut+"' \n" +
         "and cast(q.asistencia_marca_inicio as date) = '"+fechaMarcaje+"'\n" +
         "and q.brigadista_rut = b.brigadista_rut)";
-        System.out.println(query);
+        System.out.println("modificacion = "+query);
         try{
         stmt.executeUpdate(query);
         }catch(Exception e){

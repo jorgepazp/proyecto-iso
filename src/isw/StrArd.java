@@ -8,7 +8,9 @@ package isw;
 
 import com.panamahitek.ArduinoException;
 import com.panamahitek.PanamaHitek_Arduino;
+import java.awt.Toolkit;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jssc.SerialPortEvent;
@@ -49,12 +51,17 @@ public class StrArd {
                     //Se imprime la variable msg
                     System.out.println(msg);
                     conexion.registrarAsistencia(msg);
+                    final Runnable runnable =
+     (Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.exclamation");
+if (runnable != null) runnable.run();
                 }
             } catch (SerialPortException ex) {
                 Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ArduinoException ex) {
                 Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
+                Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
                 Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -70,11 +77,11 @@ public class StrArd {
             
             return true;
         } catch (ArduinoException ex) {
-            Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("prueba");
             return false;
         } catch (SerialPortException ex) {
-            Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
+          //  Logger.getLogger(StrArd.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         } 
     }
